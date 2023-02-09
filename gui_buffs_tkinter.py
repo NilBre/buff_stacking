@@ -205,5 +205,5 @@ root.mainloop()
 # 3. make different empowering buffs
 # 4. make different debuffs
 # 5. align the checkboxes to be in line with one another
-# 6.
+# 6. remember: make branch for each development aspect!
 ######################################################################

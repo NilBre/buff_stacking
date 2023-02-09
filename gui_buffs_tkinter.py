@@ -177,15 +177,16 @@ def Select_Weapon():
     # not only set to these values but also multiply the pertentage multiplier to it later
     # base_damage = window.L7.cget("text")
     print("selected weapon: " + Svar1.get())
-    match Svar1:
+    match Svar1.get():
         case "Cataclysmic":
-            window.L7.configure(text="123")
+            window.L7.configure(text="56586")
         case "Stormchaser":
-            window.L7.configure(text="456")
+            window.L7.configure(text="1000")
         case "Fire and Forget":
-            window.L7.configure(text="789")
+            window.L7.configure(text="100")
         case "Reed's Regret":
-            window.L7.configure(text="101")
+            window.L7.configure(text="5000")
+    isChecked()
 
 # define Checkbox variables
 Cvar1 = IntVar()  # empowering buff

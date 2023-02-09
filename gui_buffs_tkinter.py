@@ -28,29 +28,26 @@ class Window():
         self.L1 = Label(self.section1_1, text="Weapon Name")  # what is written on frame
         self.L1.pack(padx=4, pady=4)  # pack it up
 
-        self.E1 = Entry(self.section1_1)  # what should be tehe stuff, here entry
-        self.E1.pack(padx=4, pady=4)
+        self.M1 = OptionMenu(self.section1_1, Svar1, *wp)
+        self.M1.pack(padx=4, pady=4)
 
-        self.L2 = Label(self.section1_1, text = "Base Damage")
+        self.L2 = Label(self.section1_1, text = "Base Damage (single bullet)")
         self.L2.pack(padx=4, pady=4)
 
-        self.E2 = Entry(self.section1_1)
-        self.E2.pack(padx=4, pady=4)
+        self.L7 = Label(self.section1_1, text = f"0")
+        self.L7.pack(padx=4, pady=4)
 
-        self.L3 = Label(self.section1_1, text = "Damage per Bullet")
+        # self.E2 = Entry(self.section1_1)
+        # self.E2.pack(padx=4, pady=4)
+
+        self.L3 = Label(self.section1_1, text = "Damage per Shot")
         self.L3.pack(padx=4, pady=4)
 
         self.L4 = Label(self.section1_1, text = f"0")
         self.L4.pack(padx=4, pady=4)
 
-        # self.E3 = Entry(self.section1_1)
-        # self.E3.pack(padx=4, pady=4)
-
-        # self.L4 = Label(self.section1_1, text = "Reserves")
-        # self.L4.pack(padx=4, pady=4)
-        #
-        # self.E4 = Entry(self.section1_1)
-        # self.E4.pack(padx=4, pady=4)
+        self.Button = Button(self.section1_1, text="select weapon", command=Select_Weapon)
+        self.Button.pack(padx=4, pady=4)
 
         self.L5 = Label(self.section1_1, text = f"Damage Multiplier: {round((np.prod(multiplier) - 1) * 100, 1)} in %")  # this needs to be updated
         self.L5.pack(padx=4, pady=4)
@@ -133,7 +130,8 @@ def retrieve():
     print("==========")
 
 def isChecked():
-    base_damage = window.E2.get()
+#    base_damage = window.E2.get()
+    base_damage = window.L7.cget("text")
     multipliers = np.array([1])
     value1  = Cvar1.get()   # empowering buff: for now 35 % (lumina buff)
     value2  = Cvar2.get()   # debuff: for now full debuffed 30 %
@@ -175,10 +173,19 @@ def isChecked():
     # print(base_damage)
     window.L4.configure(text=f"{round(float(base_damage) * np.prod(multipliers), 1)}")
 
-# def isWritten():
-#     char = ""
-
-# end defining functions
+def Select_Weapon():
+    # not only set to these values but also multiply the pertentage multiplier to it later
+    # base_damage = window.L7.cget("text")
+    print("selected weapon: " + Svar1.get())
+    match Svar1:
+        case "Cataclysmic":
+            window.L7.configure(text="123")
+        case "Stormchaser":
+            window.L7.configure(text="456")
+        case "Fire and Forget":
+            window.L7.configure(text="789")
+        case "Reed's Regret":
+            window.L7.configure(text="101")
 
 # define Checkbox variables
 Cvar1 = IntVar()  # empowering buff
@@ -193,6 +200,11 @@ Cvar9 = IntVar()  # Frenzy
 Cvar10 = IntVar()  # Vorpal Weapon
 Cvar11 = IntVar()  # multi kill clip
 Cvar12 = IntVar()  # swashbuckler
+
+# here: add ALL weapons for the dropdown menu
+wp = ["Cataclysmic","Stormchaser","Fire and Forget","Reed's Regret"]
+Svar1 = StringVar(root)
+Svar1.set(wp[0])
 
 # root.resizable(False, False)
 window = Window(root)

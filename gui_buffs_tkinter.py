@@ -40,7 +40,7 @@ class Window():
         # self.E2 = Entry(self.section1_1)
         # self.E2.pack(padx=4, pady=4)
 
-        self.L3 = Label(self.section1_1, text = "Damage per Shot")
+        self.L3 = Label(self.section1_1, text = "Amplified Damage")
         self.L3.pack(padx=4, pady=4)
 
         self.L4 = Label(self.section1_1, text = f"0")
@@ -169,9 +169,12 @@ def isChecked():
         multipliers = np.append(multipliers, 1.5)
     if value12 == 1:
         multipliers = np.append(multipliers, 1.333)
+    if Svar1.get() == "Stormchaser" or Svar1.get() == "Fire and Forget":
+        window.L4.configure(text=f"{round(float(base_damage) * np.prod(multipliers), 1)} ({round(float(base_damage) * np.prod(multipliers)  * 3, 1)})")
+    if Svar1.get() != "Stormchaser" and Svar1.get() != "Fire and Forget":
+        window.L4.configure(text=f"{round(float(base_damage) * np.prod(multipliers), 1)}")
     window.L5.configure(text=f"Damage Multiplier: {round((np.prod(multipliers) - 1) * 100, 1)} in %")
     # print(base_damage)
-    window.L4.configure(text=f"{round(float(base_damage) * np.prod(multipliers), 1)}")
 
 def Select_Weapon():
     # not only set to these values but also multiply the pertentage multiplier to it later
@@ -181,11 +184,11 @@ def Select_Weapon():
         case "Cataclysmic":
             window.L7.configure(text="56586")
         case "Stormchaser":
-            window.L7.configure(text="1000")
+            window.L7.configure(text="27704") # times 3
         case "Fire and Forget":
-            window.L7.configure(text="100")
+            window.L7.configure(text="28258") # times 3
         case "Reed's Regret":
-            window.L7.configure(text="5000")
+            window.L7.configure(text="123")
     isChecked()
 
 # define Checkbox variables

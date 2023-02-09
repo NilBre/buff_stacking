@@ -151,7 +151,7 @@ if __name__=="__main__":
     storm_bullet_dmg = stormchaser.multiplier("miniboss",
                                empower="lumina",
                                FoM=True,
-                               debuff_type="weak",
+                               debuff_type="debuff",
                                POR=True,
                                bakris=False,
                                f_line=True)

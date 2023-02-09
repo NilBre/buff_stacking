@@ -4,7 +4,7 @@ import re
 # import tkinter as tk
 # import tkinter as ttk
 from tkinter import *
-import mysql.connector
+#import mysql.connector
 # what do i need in terms of tkinter features?
 # 1. Frame Widget: for the window: (1200, 900) maybe?
 # 2. Check Button: so the user can check which buffs and debuffs he wants

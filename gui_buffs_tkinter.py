@@ -5,16 +5,6 @@ import re
 # import tkinter as ttk
 from tkinter import *
 #import mysql.connector
-# what do i need in terms of tkinter features?
-# 1. Frame Widget: for the window: (1200, 900) maybe?
-# 2. Check Button: so the user can check which buffs and debuffs he wants
-# 3. label: to label the check buttons
-# 4. List Box: drop down menu for all weapons to display -> the user
-    # can choose from the available drop down features
-# 5. Canvas: maybe show a picture of the weapon when selecting it
-# 6. Scale: slider for the user to pick from a range of values (swashbuckler 1 -> 5) ?
-# 7. TopLevel: spawning a new tkinter window
-# 8. OptionMenu
 
 class Window():
     def __init__(self, master):
@@ -37,9 +27,6 @@ class Window():
         self.L7 = Label(self.section1_1, text = f"0")
         self.L7.pack(padx=4, pady=4)
 
-        # self.E2 = Entry(self.section1_1)
-        # self.E2.pack(padx=4, pady=4)
-
         self.L3 = Label(self.section1_1, text = "Amplified Damage")
         self.L3.pack(padx=4, pady=4)
 
@@ -61,10 +48,26 @@ class Window():
         self.L6 = Label(self.section1, text="Buffs and Debuffs")
         self.L6.pack(padx=4, pady=4)
 
-        self.C1 = Checkbutton(self.section1_2, text = "Empowering Buff", variable = Cvar1, command = isChecked)
-        self.C1.pack(padx=4, pady=4)
-        self.C2 = Checkbutton(self.section1_2, text = "Debuff", variable = Cvar2, command = isChecked)
-        self.C2.pack(padx=4, pady=4)
+        ## ---> sub section1_2_1
+        self.section1_2_1 = Frame(self.section1_2)
+        self.R1 = Radiobutton(self.section1_2_1, text="Lumina buff", variable = Rvar1, value = 0, command = isChecked)
+        self.R1.pack(padx=4, pady=4, side=LEFT)
+        self.R1 = Radiobutton(self.section1_2_1, text="Well of Radiance", variable = Rvar1, value = 1, command = isChecked)
+        self.R1.pack(padx=4, pady=4, side=LEFT)
+        self.R1 = Radiobutton(self.section1_2_1, text="Empowering Rift", variable = Rvar1, value = 2, command = isChecked)
+        self.R1.pack(padx=4, pady=4, side=LEFT)
+        self.section1_2_1.pack(padx=4, pady=4)
+        ## ---> sub section1_2_1
+
+        ## ---> sub section1_2_2
+        self.section1_2_2 = Frame(self.section1_2)
+        self.R1 = Radiobutton(self.section1_2_2, text="Weaken", variable = Rvar2, value = 0, command = isChecked)
+        self.R1.pack(padx=4, pady=4, side=LEFT)
+        self.R1 = Radiobutton(self.section1_2_2, text="Full Debuff", variable = Rvar2, value = 1, command = isChecked)
+        self.R1.pack(padx=4, pady=4, side=LEFT)
+        self.section1_2_2.pack(padx=4, pady=4)
+        ## ---> sub section1_2_2
+
         self.C3 = Checkbutton(self.section1_2, text = "Font of Might", variable = Cvar3, command = isChecked)
         self.C3.pack(padx=4, pady=4)
         self.C4 = Checkbutton(self.section1_2, text = "Focused Fury", variable = Cvar4, command = isChecked)
@@ -95,14 +98,12 @@ class Window():
 
         self.section1_2.pack(padx=4, pady=4, side=RIGHT)
         ## ---> subsection1_3
-        self.section1.pack(padx = 5, pady = 5, expand = True, fill=X)  # ---> pack section up, close it here
+        self.section1.pack(padx = 5, pady = 5, expand = True, fill=X)
         # --- section1
 
         # --- section2
-        self.section2 = Frame(self.Main)  # ---> define section2 Frame inside Main Frame
+        self.section2 = Frame(self.Main)
 
-        # self.Button = Button(self.section2, text="Submit", command = retrieve)
-        # self.Button.pack(padx=4, pady=4)
 
         self.section2.pack(padx=4, pady=4, expand=True, fill=X)
         # section2
@@ -112,29 +113,11 @@ class Window():
 # Begin main part
 root = Tk()
 
-# define some functions
-def retrieve():
-    print("==========")
-    print(Cvar1.get())
-    print(Cvar2.get())
-    print(Cvar3.get())
-    print(Cvar4.get())
-    print(Cvar5.get())
-    print(Cvar6.get())
-    print(Cvar7.get())
-    print(Cvar8.get())
-    print(Cvar9.get())
-    print(Cvar10.get())
-    print(Cvar11.get())
-    print(Cvar12.get())
-    print("==========")
-
 def isChecked():
-#    base_damage = window.E2.get()
     base_damage = window.L7.cget("text")
     multipliers = np.array([1])
-    value1  = Cvar1.get()   # empowering buff: for now 35 % (lumina buff)
-    value2  = Cvar2.get()   # debuff: for now full debuffed 30 %
+    value0  = Rvar1.get()   # empowering buffs as Radiobutton (35% / 25% / 20%)
+    value2  = Rvar2.get()   # debuff: 15% weaken or 30% debuff
     value3  = Cvar3.get()   # Font of Might: 25 %
     value4  = Cvar4.get()   # Focused Fury: 22 %
     value5  = Cvar5.get()   # Power of Rasputin: 10 %
@@ -145,30 +128,36 @@ def isChecked():
     value10 = Cvar10.get()  # Vorpal Weapon: for now 10 % (heavy weapons)
     value11 = Cvar11.get()  # Multi Kill Clip: for now max stacks = 50 %
     value12 = Cvar12.get()  # Swashbuckler: for now max stacks = 33.3 %
-    if value1 == 1:
-        multipliers = np.append(multipliers, 1.35)
+    if value0 == 0:
+        multipliers = np.append(multipliers, 1.35) # lumina
+    if value0 == 1:
+        multipliers = np.append(multipliers, 1.25) # well of radiance, bubble
+    if value0 == 2:
+        multipliers = np.append(multipliers, 1.2)  # empowering rift
+    if value2 == 0:
+        multipliers = np.append(multipliers, 1.15) # weaken
     if value2 == 1:
-        multipliers = np.append(multipliers, 1.3)
+        multipliers = np.append(multipliers, 1.3)  # debuff
     if value3 == 1:
-        multipliers = np.append(multipliers, 1.25)
+        multipliers = np.append(multipliers, 1.25) # font of might
     if value4 == 1:
-        multipliers = np.append(multipliers, 1.22)
+        multipliers = np.append(multipliers, 1.22) # focused fury
     if value5 == 1:
-        multipliers = np.append(multipliers, 1.10)
+        multipliers = np.append(multipliers, 1.10) # power of rasputin
     if value6 == 1:
-        multipliers = np.append(multipliers, 1.35)
+        multipliers = np.append(multipliers, 1.35) # bait and switch
     if value7 == 1:
-        multipliers = np.append(multipliers, 1.20)
+        multipliers = np.append(multipliers, 1.20) # mask of bakris
     if value8 == 1:
-        multipliers = np.append(multipliers, 1.20)
+        multipliers = np.append(multipliers, 1.20) # firing line
     if value9 == 1:
-        multipliers = np.append(multipliers, 1.15)
+        multipliers = np.append(multipliers, 1.15) # frenzy
     if value10 == 1:
-        multipliers = np.append(multipliers, 1.10)
+        multipliers = np.append(multipliers, 1.10) # vorpal heavy
     if value11 == 1:
-        multipliers = np.append(multipliers, 1.5)
+        multipliers = np.append(multipliers, 1.5) # multi kill clip max
     if value12 == 1:
-        multipliers = np.append(multipliers, 1.333)
+        multipliers = np.append(multipliers, 1.333) # swash max
     if Svar1.get() == "Stormchaser" or Svar1.get() == "Fire and Forget":
         window.L4.configure(text=f"{round(float(base_damage) * np.prod(multipliers), 1)} ({round(float(base_damage) * np.prod(multipliers)  * 3, 1)})")
     if Svar1.get() != "Stormchaser" and Svar1.get() != "Fire and Forget":
@@ -177,23 +166,28 @@ def isChecked():
     # print(base_damage)
 
 def Select_Weapon():
-    # not only set to these values but also multiply the pertentage multiplier to it later
-    # base_damage = window.L7.cget("text")
     print("selected weapon: " + Svar1.get())
-    match Svar1.get():
-        case "Cataclysmic":
-            window.L7.configure(text="56586")
-        case "Stormchaser":
-            window.L7.configure(text="27704") # times 3
-        case "Fire and Forget":
-            window.L7.configure(text="28258") # times 3
-        case "Reed's Regret":
-            window.L7.configure(text="123")
+
+    if Svar1.get() == "Cataclysmic":
+        window.L7.configure(text="56586")
+    if Svar1.get() == "Stormchaser":
+        window.L7.configure(text="27704")
+    if Svar1.get() == "Fire and Forget":
+        window.L7.configure(text="28258")
+    if Svar1.get() == "Reed's Regret":
+        window.L7.configure(text="123")
+#    match Svar1.get():
+#        case "Cataclysmic":
+#            window.L7.configure(text="56586")
+#        case "Stormchaser":
+#            window.L7.configure(text="27704") # times 3
+#        case "Fire and Forget":
+#            window.L7.configure(text="28258") # times 3
+#        case "Reed's Regret":
+#            window.L7.configure(text="123")
     isChecked()
 
 # define Checkbox variables
-Cvar1 = IntVar()  # empowering buff
-Cvar2 = IntVar()  # debuff
 Cvar3 = IntVar()  # Font of Might
 Cvar4 = IntVar()  # Focused Fury
 Cvar5 = IntVar()  # Power of Rasputin
@@ -201,25 +195,28 @@ Cvar6 = IntVar()  # Bait and Switch
 Cvar7 = IntVar()  # Mask of Bakris
 Cvar8 = IntVar()  # Firing Line
 Cvar9 = IntVar()  # Frenzy
-Cvar10 = IntVar()  # Vorpal Weapon
-Cvar11 = IntVar()  # multi kill clip
-Cvar12 = IntVar()  # swashbuckler
+Cvar10 = IntVar() # Vorpal Weapon
+Cvar11 = IntVar() # multi kill clip
+Cvar12 = IntVar() # swashbuckler
 
 # here: add ALL weapons for the dropdown menu
 wp = ["Cataclysmic","Stormchaser","Fire and Forget","Reed's Regret"]
 Svar1 = StringVar(root)
 Svar1.set(wp[0])
 
-# root.resizable(False, False)
+# make Radiobutton for empowering buff and debuff options
+Rvar1 = IntVar()
+Rvar2 = IntVar()
+
 window = Window(root)
 
 root.mainloop()
 
 ################ TODO ###############################################
 # 1. get the base dmg from a database when i enter name
-# 2. or make a dropdown menu for name and have the dmg mapped to it
-# 3. make different empowering buffs
+# 2. or make a dropdown menu for name and have the dmg mapped to it (done)
+# 3. make different empowering buffs (done)
 # 4. make different debuffs
 # 5. align the checkboxes to be in line with one another
-# 6. remember: make branch for each development aspect!
+# 6. remember: make branch for each development aspect! (jep remembered)
 ######################################################################

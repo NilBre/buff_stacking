@@ -78,22 +78,22 @@ class Window():
         ## ---> sub section1_2
 
         ## ---> subsection1_3
-        self.section1_2 = Frame(self.section1)
+        self.section1_3 = Frame(self.section1)
 
-        self.C7 = Checkbutton(self.section1_2, text = "Mask of Bakris", variable = Cvar7, command = isChecked)
+        self.C7 = Checkbutton(self.section1_3, text = "Mask of Bakris", variable = Cvar7, command = isChecked)
         self.C7.pack(padx=4, pady=4)
-        self.C8 = Checkbutton(self.section1_2, text = "Firing Line", variable = Cvar8, command = isChecked)
+        self.C8 = Checkbutton(self.section1_3, text = "Firing Line", variable = Cvar8, command = isChecked)
         self.C8.pack(padx=4, pady=4)
-        self.C9 = Checkbutton(self.section1_2, text = "Frenzy", variable = Cvar9, command = isChecked)
+        self.C9 = Checkbutton(self.section1_3, text = "Frenzy", variable = Cvar9, command = isChecked)
         self.C9.pack(padx=4, pady=4)
-        self.C10 = Checkbutton(self.section1_2, text = "Vorpal Weapon", variable = Cvar10, command = isChecked)
+        self.C10 = Checkbutton(self.section1_3, text = "Vorpal Weapon", variable = Cvar10, command = isChecked)
         self.C10.pack(padx=4, pady=4)
-        self.C11 = Checkbutton(self.section1_2, text = "Multi Kill Clip", variable = Cvar11, command = isChecked)
+        self.C11 = Checkbutton(self.section1_3, text = "Multi Kill Clip", variable = Cvar11, command = isChecked)
         self.C11.pack(padx=4, pady=4)
-        self.C12 = Checkbutton(self.section1_2, text = "Swashbuckler", variable = Cvar12, command = isChecked)
+        self.C12 = Checkbutton(self.section1_3, text = "Swashbuckler", variable = Cvar12, command = isChecked)
         self.C12.pack(padx=4, pady=4)
 
-        self.section1_2.pack(padx=4, pady=4, side=RIGHT)
+        self.section1_3.pack(padx=4, pady=4, side=RIGHT)
         ## ---> subsection1_3
         self.section1.pack(padx = 5, pady = 5, expand = True, fill=X)  # ---> pack section up, close it here
         # --- section1

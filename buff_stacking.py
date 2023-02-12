@@ -119,7 +119,7 @@ if __name__=="__main__":
     print("multi killclip    : \t (1|2|3)")  # firing line for weapons which can get it
     print("swashbuckler      : \t (1|2|3|4|5)")  # firing line for weapons which can get it
     # print("=================== define weapons here ====================")
-    fire_and_forget = weapon("Fire_And_Forget", 5, 22, 28258, 533, "miniboss")  # have not tested max bullets for this gun
+    fire_and_forget = weapon("Fire_And_Forget", 6, 25, 28258, 533, "miniboss")  # have not tested max bullets for this gun
     cataclysmic = weapon("Cataclysmic", 6, 34, 56586, 533, "miniboss")  # 34 total mag bc of 4 times the charm
     stormchaser = weapon("Stormchaser", 5, 24, 27704, 533, "miniboss")
     print("=================== Fire and Forget ========================")

@@ -58,14 +58,17 @@ class Window():
         self.L7 = Label(self.section1, text="EMPOWERING BUFFS")
         self.L7.pack(padx=4, pady=4)
 
+
         self.R0 = Radiobutton(self.section1, text="No Empowering Buff", variable = Rvar0, value = 0, command = isChecked)
         self.R0.pack(padx=4, pady=4)
-        self.R1 = Radiobutton(self.section1, text="Lumina buff", variable = Rvar0, value = 1, command = isChecked)
+        self.R1 = Radiobutton(self.section1, text="Bannershield", variable = Rvar0, value = 1, command = isChecked)
         self.R1.pack(padx=4, pady=4)
-        self.R2 = Radiobutton(self.section1, text="Well of Radiance", variable = Rvar0, value = 2, command = isChecked)
+        self.R2 = Radiobutton(self.section1, text="Lumina / Lucent Blade", variable = Rvar0, value = 2, command = isChecked)
         self.R2.pack(padx=4, pady=4)
-        self.R3 = Radiobutton(self.section1, text="Empowering Rift", variable = Rvar0, value = 3, command = isChecked)
+        self.R3 = Radiobutton(self.section1, text="Well / Bubble", variable = Rvar0, value = 3, command = isChecked)
         self.R3.pack(padx=4, pady=4)
+        self.R4 = Radiobutton(self.section1, text="Empowering Rift / Mantle of. B. H.", variable = Rvar0, value = 4, command = isChecked)
+        self.R4.pack(padx=4, pady=4)
 
         self.section1.pack(padx=4, pady=4, expand=True, fill=X, side=LEFT)
         # --- section 1
@@ -93,6 +96,22 @@ class Window():
         self.C8.pack(padx=4, pady=4)
         self.C9 = Checkbutton(self.section2, text = "Swashbuckler", variable = Cvar11, command = isChecked)
         self.C9.pack(padx=4, pady=4)
+        self.C10 = Checkbutton(self.section2, text = "High Impact Reserves", variable = Cvar12, command = isChecked)
+        self.C10.pack(padx=4, pady=4)
+        self.C11 = Checkbutton(self.section2, text = "Golden Tricorn x1", variable = Cvar13, command = isChecked)
+        self.C11.pack(padx=4, pady=4)
+        self.C12 = Checkbutton(self.section2, text = "Golden Tricorn x2", variable = Cvar14, command = isChecked)
+        self.C12.pack(padx=4, pady=4)
+        self.C13 = Checkbutton(self.section2, text = "Cluster Bombs", variable = Cvar15, command = isChecked)
+        self.C13.pack(padx=4, pady=4)
+        self.C14 = Checkbutton(self.section2, text = "Explosive Light (GL)", variable = Cvar16, command = isChecked)
+        self.C14.pack(padx=4, pady=4)
+        self.C15 = Checkbutton(self.section2, text = "Explosive Light (Rocket)", variable = Cvar17, command = isChecked)
+        self.C15.pack(padx=4, pady=4)
+        self.C16 = Checkbutton(self.section2, text = "Full Court", variable = Cvar18, command = isChecked)
+        self.C16.pack(padx=4, pady=4)
+        self.C17 = Checkbutton(self.section2, text = "Adagio", variable = Cvar19, command = isChecked)
+        self.C17.pack(padx=4, pady=4)
 
         self.section2.pack(padx=4, pady=4, expand=True, fill=X, side=LEFT)
         # --- section 2
@@ -122,26 +141,37 @@ root = Tk()
 def isChecked():
     base_damage = window.L3.cget("text")
     multipliers = np.array([1])
-    value0  = Rvar0.get()   # empowering buffs as Radiobutton (35% / 25% / 20%)
-    value1  = Rvar1.get()   # debuff: 15% weaken or 30% debuff
-    value2  = Cvar2.get()   # Font of Might: 25 %
-    value3  = Cvar3.get()   # Focused Fury: 22 %
-    value4  = Cvar4.get()   # Power of Rasputin: 10 %
-    value5  = Cvar5.get()   # Bait and Switch: 35 %
-    value6  = Cvar6.get()   # Mask of Bakris: 20 %
-    value7  = Cvar7.get()   # Firing Line: 20 %
-    value8  = Cvar8.get()   # Frenzy: 15 %
-    value9  = Cvar9.get()   # Vorpal Weapon: for now 10 % (heavy weapons)
-    value10 = Cvar10.get()  # Multi Kill Clip: for now max stacks = 50 %
-    value11 = Cvar11.get()  # Swashbuckler: for now max stacks = 33.3 %
+    value0  = Rvar0.get()
+    value1  = Rvar1.get()
+    value2  = Cvar2.get()
+    value3  = Cvar3.get()
+    value4  = Cvar4.get()
+    value5  = Cvar5.get()
+    value6  = Cvar6.get()
+    value7  = Cvar7.get()
+    value8  = Cvar8.get()
+    value9  = Cvar9.get()
+    value10 = Cvar10.get()
+    value11 = Cvar11.get()
+    value12 = Cvar12.get()
+    value13 = Cvar13.get()
+    value14 = Cvar14.get()
+    value15 = Cvar15.get()
+    value16 = Cvar16.get()
+    value17 = Cvar17.get()
+    value18 = Cvar18.get()
+    value19 = Cvar19.get()
+
     if value0 == 0:
         multipliers = np.append(multipliers, 1)    # no empowering buff
     if value0 == 1:
-        multipliers = np.append(multipliers, 1.35) # lumina
+        multipliers = np.append(multipliers, 1.35) # bannershield
     if value0 == 2:
-        multipliers = np.append(multipliers, 1.25) # well of radiance, bubble
+        multipliers = np.append(multipliers, 1.25) # Lumina, lucent blade
     if value0 == 3:
-        multipliers = np.append(multipliers, 1.2)  # empowering rift
+        multipliers = np.append(multipliers, 1.2)  # well of radiance, bubble
+    if value0 == 4:
+        multipliers = np.append(multipliers, 1)    # empowering buff
     if value1 == 0:
         multipliers = np.append(multipliers, 1)    # no debuff
     if value1 == 1:
@@ -168,6 +198,22 @@ def isChecked():
         multipliers = np.append(multipliers, 1.5) # multi kill clip max
     if value11 == 1:
         multipliers = np.append(multipliers, 1.333) # swash max
+    if value12 == 1:
+        multipliers = np.append(multipliers, 1.24) # High impact resevrs (take max for now at 24 %)
+    if value13 == 1:
+        multipliers = np.append(multipliers, 1.15) # Golden Tricorn x1
+    if value14 == 1:
+        multipliers = np.append(multipliers, 1.5) # Golden Tricorn x2
+    if value15 == 1:
+        multipliers = np.append(multipliers, 1.24) # Cluster bombs
+    if value16 == 1:
+        multipliers = np.append(multipliers, 1.44) # Explosive Light for GLs
+    if value17 == 1:
+        multipliers = np.append(multipliers, 1.25) # Explosive Lightfor Rockets
+    if value18 == 1:
+        multipliers = np.append(multipliers, 1.25) # Full Court (max = 25 %)
+    if value19 == 1:
+        multipliers = np.append(multipliers, 1.3) # Adagio: +30 % dmg, -20 % fire rate
     if Svar0.get() == "Stormchaser" or Svar0.get() == "Fire and Forget":
         window.L5.configure(text=f"{round(float(base_damage) * np.prod(multipliers), 1)} ({round(float(base_damage) * np.prod(multipliers)  * 3, 1)})")
     if Svar0.get() != "Stormchaser" and Svar0.get() != "Fire and Forget":
@@ -177,24 +223,58 @@ def isChecked():
 
 def Select_Weapon():
     print("selected weapon: " + Svar0.get())
+    ### --- python version older than 3.10 (don't know switch cases)
+    # if Svar0.get() == "Cataclysmic":
+    #     window.L3.configure(text="56586")
+    # if Svar0.get() == "Stormchaser":
+    #     window.L3.configure(text="27704")
+    # if Svar0.get() == "Fire and Forget":
+    #     window.L3.configure(text="28258")
+    # if Svar0.get() == "Reed's Regret":
+    #     window.L3.configure(text="123")
 
-    if Svar0.get() == "Cataclysmic":
-        window.L3.configure(text="56586")
-    if Svar0.get() == "Stormchaser":
-        window.L3.configure(text="27704")
-    if Svar0.get() == "Fire and Forget":
-        window.L3.configure(text="28258")
-    if Svar0.get() == "Reed's Regret":
-        window.L3.configure(text="123")
-#    match Svar1.get():
-#        case "Cataclysmic":
-#            window.L7.configure(text="56586")
-#        case "Stormchaser":
-#            window.L7.configure(text="27704") # times 3
-#        case "Fire and Forget":
-#            window.L7.configure(text="28258") # times 3
-#        case "Reed's Regret":
-#            window.L7.configure(text="123")
+
+    match Svar0.get():
+        case "Cataclysmic":
+            window.L3.configure(text="56586")
+        case "Stormchaser":
+            window.L3.configure(text="27704") # times 3
+        case "Fire and Forget":
+            window.L3.configure(text="28258") # times 3
+        case "Reed's Regret":
+            window.L3.configure(text="123")
+        case "Sailspy Pitchglass":
+            window.L3.configure(text="1")
+        case "Taipan 4FR":
+            window.L3.configure(text="2")
+        case "Threaded Needle":
+            window.L3.configure(text="3")
+        case "The Hothead":
+            window.L3.configure(text="4")
+        case "Blowout":
+            window.L3.configure(text="5")
+        case "Roar Of The Bear":
+            window.L3.configure(text="6")
+        case "Hezen Vengeance":
+            window.L3.configure(text="7")
+        case "RedHerring":
+            window.L3.configure(text="8")
+        case "Royal Entry":
+            window.L3.configure(text="9")
+        case "Bump In The Night":
+            window.L3.configure(text="10")
+        case "Palmyra-B":
+            window.L3.configure(text="11")
+        case "Wendigo-GL3":
+            window.L3.configure(text="12")
+        case "Interference VI":
+            window.L3.configure(text="13")
+        case "Tarnation":
+            window.L3.configure(text="14")
+        case "Cry Mutiny":
+            window.L3.configure(text="15")
+        case "Canix Major":
+            window.L3.configure(text="16")
     isChecked()
 
 # define Checkbox variables
@@ -208,9 +288,38 @@ Cvar8 = IntVar()  # Frenzy
 Cvar9 = IntVar()  # Vorpal Weapon
 Cvar10 = IntVar() # multi kill clip
 Cvar11 = IntVar() # swashbuckler
-
+Cvar12 = IntVar() # High Impact Reserves
+Cvar13 = IntVar() # Golden Tricorn x1
+Cvar14 = IntVar() # Golden Tricorn x2
+Cvar15 = IntVar() # Cluster bombs
+Cvar16 = IntVar() # Explosive Light (GL)
+Cvar17 = IntVar() # Explosive Light (Rockets)
+Cvar18 = IntVar() # Full Court
+Cvar19 = IntVar() # Adagio
 # here: add ALL weapons for the dropdown menu
-wp = ["Cataclysmic","Stormchaser","Fire and Forget","Reed's Regret"]
+wp = ["Cataclysmic",
+    "Stormchaser",
+    "Fire and Forget",
+    "Reed's Regret",
+    "Sailspy Pitchglass",
+    "Taipan 4FR",
+    "Threaded Needle",
+    "The Hothead",
+    "Blowout",
+    "Roar Of The Bear",
+    "Hezen Vengeance",
+    "RedHerring",
+    "Royal Entry",
+    "Bump In The Night",
+    "Palmyra-B",
+    "Wendigo GL3",
+    "Interference VI",
+    "Tarnation",
+    "Cry Mutiny",
+    "Typhon GL5",
+    "Canis Major",
+    ]
+
 Svar0 = StringVar(root)
 Svar0.set(wp[0])
 
@@ -223,10 +332,13 @@ window = Window(root)
 root.mainloop()
 
 ################ TODO ###############################################
-# 1. get the base dmg from a database when i enter name
-# 2. or make a dropdown menu for name and have the dmg mapped to it (done)
-# 3. make different empowering buffs (done)
-# 4. make different debuffs
-# 5. align the checkboxes to be in line with one another
-# 6. remember: make branch for each development aspect! (jep remembered)
+# for empowering buffs: group them by buff% for each layer, like:
+# 40 %: banner shield
+# 35 %: lumina, lucent blade
+# 25 %: well of radiance, weapons of light, radiant
+# 20 %: empowering rift, High Energy Fire, mantle of battle harmony
+#
+# Add more weapons buffs:
+# Golden Tricorn and Explosive light can be done as dropdown, or Radiobutton with 3 options (x0, x1, x2)
+
 ######################################################################

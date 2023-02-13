@@ -233,7 +233,7 @@ def Select_Weapon():
     # if Svar0.get() == "Reed's Regret":
     #     window.L3.configure(text="123")
 
-
+    # damage numbers are for minibosses
     match Svar0.get():
         case "Cataclysmic":
             window.L3.configure(text="56586")
@@ -242,39 +242,39 @@ def Select_Weapon():
         case "Fire and Forget":
             window.L3.configure(text="28258") # times 3
         case "Reed's Regret":
-            window.L3.configure(text="123")
+            window.L3.configure(text="57822")
         case "Sailspy Pitchglass":
-            window.L3.configure(text="1")
+            window.L3.configure(text="58356")
         case "Taipan 4FR":
-            window.L3.configure(text="2")
+            window.L3.configure(text="58356")
         case "Threaded Needle":
-            window.L3.configure(text="3")
+            window.L3.configure(text="58356")
         case "The Hothead":
-            window.L3.configure(text="4")
+            window.L3.configure(text="98208")
         case "Blowout":
-            window.L3.configure(text="5")
+            window.L3.configure(text="1")
         case "Roar Of The Bear":
-            window.L3.configure(text="6")
+            window.L3.configure(text="84309")
         case "Hezen Vengeance":
-            window.L3.configure(text="7")
+            window.L3.configure(text="98209")
         case "RedHerring":
-            window.L3.configure(text="8")
+            window.L3.configure(text="1")
         case "Royal Entry":
-            window.L3.configure(text="9")
+            window.L3.configure(text="80352")
         case "Bump In The Night":
-            window.L3.configure(text="10")
+            window.L3.configure(text="98209")
         case "Palmyra-B":
-            window.L3.configure(text="11")
-        case "Wendigo-GL3":
-            window.L3.configure(text="12")
+            window.L3.configure(text="80352")
+        case "Wendigo GL3":
+            window.L3.configure(text="1")
         case "Interference VI":
-            window.L3.configure(text="13")
+            window.L3.configure(text="39382") # min = 39382, max = 46157
         case "Tarnation":
-            window.L3.configure(text="14")
+            window.L3.configure(text="31880")
         case "Cry Mutiny":
-            window.L3.configure(text="15")
-        case "Canix Major":
-            window.L3.configure(text="16")
+            window.L3.configure(text="35411")
+        case "Typhon GL5":
+            window.L3.configure(text="39155")
     isChecked()
 
 # define Checkbox variables
@@ -317,7 +317,6 @@ wp = ["Cataclysmic",
     "Tarnation",
     "Cry Mutiny",
     "Typhon GL5",
-    "Canis Major",
     ]
 
 Svar0 = StringVar(root)

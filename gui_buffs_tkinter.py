@@ -58,7 +58,6 @@ class Window():
         self.L7 = Label(self.section1, text="EMPOWERING BUFFS")
         self.L7.pack(padx=4, pady=4)
 
-
         self.R0 = Radiobutton(self.section1, text="No Empowering Buff", variable = Rvar0, value = 0, command = isChecked)
         self.R0.pack(padx=4, pady=4)
         self.R1 = Radiobutton(self.section1, text="Bannershield", variable = Rvar0, value = 1, command = isChecked)
@@ -112,6 +111,8 @@ class Window():
         self.C16.pack(padx=4, pady=4)
         self.C17 = Checkbutton(self.section2, text = "Adagio", variable = Cvar19, command = isChecked)
         self.C17.pack(padx=4, pady=4)
+        self.C18 = Checkbutton(self.section2, text = "Lasting Impression", variable = Cvar20, command = isChecked)
+        self.C18.pack(padx=4, pady=4)
 
         self.section2.pack(padx=4, pady=4, expand=True, fill=X, side=LEFT)
         # --- section 2
@@ -161,17 +162,18 @@ def isChecked():
     value17 = Cvar17.get()
     value18 = Cvar18.get()
     value19 = Cvar19.get()
+    value20 = Cvar20.get()
 
     if value0 == 0:
         multipliers = np.append(multipliers, 1)    # no empowering buff
     if value0 == 1:
-        multipliers = np.append(multipliers, 1.35) # bannershield
+        multipliers = np.append(multipliers, 1.40) # bannershield
     if value0 == 2:
-        multipliers = np.append(multipliers, 1.25) # Lumina, lucent blade
+        multipliers = np.append(multipliers, 1.35) # Lumina, lucent blade
     if value0 == 3:
-        multipliers = np.append(multipliers, 1.2)  # well of radiance, bubble
+        multipliers = np.append(multipliers, 1.25) # well of radiance, bubble
     if value0 == 4:
-        multipliers = np.append(multipliers, 1)    # empowering buff
+        multipliers = np.append(multipliers, 1.2)  # empowering buff
     if value1 == 0:
         multipliers = np.append(multipliers, 1)    # no debuff
     if value1 == 1:
@@ -214,6 +216,8 @@ def isChecked():
         multipliers = np.append(multipliers, 1.25) # Full Court (max = 25 %)
     if value19 == 1:
         multipliers = np.append(multipliers, 1.3) # Adagio: +30 % dmg, -20 % fire rate
+    if value19 == 1:
+        multipliers = np.append(multipliers, 1.19) # lasting impression: + 30 % explosion dmg -> 19% overall
     if Svar0.get() == "Stormchaser" or Svar0.get() == "Fire and Forget":
         window.L5.configure(text=f"{round(float(base_damage) * np.prod(multipliers), 1)} ({round(float(base_damage) * np.prod(multipliers)  * 3, 1)})")
     if Svar0.get() != "Stormchaser" and Svar0.get() != "Fire and Forget":
@@ -237,45 +241,181 @@ def Select_Weapon():
     match Svar0.get():
         case "Cataclysmic":
             window.L3.configure(text="56586")
+            cataclysmic_perks()
         case "Stormchaser":
             window.L3.configure(text="27704") # times 3
+            stormchaser_perks()
         case "Fire and Forget":
             window.L3.configure(text="28258") # times 3
+            fire_and_forget_perks()
         case "Reed's Regret":
             window.L3.configure(text="57822")
+            reeds_regret_perks()
         case "Sailspy Pitchglass":
             window.L3.configure(text="58356")
+            saispy_pitchglass_perks()
         case "Taipan 4FR":
             window.L3.configure(text="58356")
+            taipan_perks()
         case "Threaded Needle":
             window.L3.configure(text="58356")
+            threaded_needle_perks()
         case "The Hothead":
             window.L3.configure(text="98208")
+            hothead_perks()
         case "Blowout":
-            window.L3.configure(text="1")
+            window.L3.configure(text="98209")
+            blowout_perks()
         case "Roar Of The Bear":
             window.L3.configure(text="84309")
+            roar_of_the_bear_perks()
         case "Hezen Vengeance":
             window.L3.configure(text="98209")
+            hezen_vengeance_perks()
+        case "Code Duello":
+            window.L3.configure(text="84309")
+            code_duello_perks()
         case "RedHerring":
             window.L3.configure(text="1")
+            red_herring_perks()
         case "Royal Entry":
             window.L3.configure(text="80352")
+            royal_entry_perks()
         case "Bump In The Night":
             window.L3.configure(text="98209")
+            bump_in_the_night_perks()
         case "Palmyra-B":
             window.L3.configure(text="80352")
+            palmyra_perks()
         case "Wendigo GL3":
             window.L3.configure(text="1")
+            wendigo_perks()
         case "Interference VI":
             window.L3.configure(text="39382") # min = 39382, max = 46157
+            interference_perks()
         case "Tarnation":
             window.L3.configure(text="31880")
+            tarnation_impact()
         case "Cry Mutiny":
             window.L3.configure(text="35411")
+            cry_mutiny_perks()
         case "Typhon GL5":
             window.L3.configure(text="39155")
+            typhon_perks()
     isChecked()
+#     undo()
+#
+# def undo():
+#     for i in range(19):
+#         label = window.C1
+#         label.config(fg='black')
+
+def cataclysmic_perks():
+    window.C1.config(fg="green")
+    window.C3.config(fg="green")
+    window.C10.config(fg="green")
+
+def stormchaser_perks():
+    window.C5.config(fg="green")
+    window.C6.config(fg="green")
+    window.C7.config(fg="green")
+
+def fire_and_forget_perks():
+    window.C1.config(fg="green")
+    window.C6.config(fg="green")
+    window.C7.config(fg="green")
+    window.C10.config(fg="green")
+
+def reeds_regret_perks():
+    window.C1.config(fg="green")
+    window.C5.config(fg="green")
+    window.C7.config(fg="green")
+
+def saispy_pitchglass_perks():
+    window.C1.config(fg="green")
+    window.C6.config(fg="green")
+    window.C7.config(fg="green")
+    window.C8.config(fg="green")
+    window.C9.config(fg="green")
+
+def taipan_perks():
+    window.C1.config(fg="green")
+    window.C5.config(fg="green")
+    window.C6.config(fg="green")
+
+def threaded_needle_perks():
+    window.C6.config(fg="green")
+    window.C7.config(fg="green")
+    window.C8.config(fg="green")
+
+def hothead_perks():
+    window.C7.config(fg="green")
+    window.C15.config(fg="green")
+    window.C18.config(fg="green")
+
+def blowout_perks():
+    window.C6.config(fg="green")
+    window.C7.config(fg="green")
+    window.C8.config(fg="green")
+    window.C9.config(fg="green")
+    window.C11.config(fg="green")
+    window.C12.config(fg="green")
+    window.C13.config(fg="green")
+    window.C15.config(fg="green")
+    window.C18.config(fg="green")
+
+def roar_of_the_bear_perks():
+    window.C7.config(fg="green")
+    window.C13.config(fg="green")
+    window.C18.config(fg="green")
+
+def hezen_vengeance_perks():
+    window.C7.config(fg="green")
+    window.C13.config(fg="green")
+    window.C18.config(fg="green")
+
+def red_herring_perks():
+    window.C6.config(fg="green")
+    window.C11.config(fg="green")
+    window.C12.config(fg="green")
+    window.C18.config(fg="green")
+
+def royal_entry_perks():
+    window.C13.config(fg="green")
+    window.C18.config(fg="green")
+
+def bump_in_the_night_perks():
+    window.C6.config(fg="green")
+    window.C7.config(fg="green")
+
+def palmyra_perks():
+    window.C6.config(fg="green")
+    window.C15.config(fg="green")
+    window.C18.config(fg="green")
+
+def wendigo_perks():
+    window.C6.config(fg="green")
+    window.C11.config(fg="green")
+    window.C12.config(fg="green")
+    window.C14.config(fg="green")
+    window.C16.config(fg="green")
+
+def interference_perks():
+    window.C9.config(fg="green")
+    window.C16.config(fg="green")
+
+def cry_mutiny_perks():
+    window.C7.config(fg="green")
+    window.C9.config(fg="green")
+
+def typhon_perks():
+    window.C15.config(fg="green")
+    window.C6.config(fg="green")
+
+def code_duello_perks():
+    window.C6.config(fg="green")
+    window.C13.config(fg="green")
+    window.C18.config(fg="green")
 
 # define Checkbox variables
 Cvar2 = IntVar()  # Font of Might
@@ -296,6 +436,7 @@ Cvar16 = IntVar() # Explosive Light (GL)
 Cvar17 = IntVar() # Explosive Light (Rockets)
 Cvar18 = IntVar() # Full Court
 Cvar19 = IntVar() # Adagio
+Cvar20 = IntVar() # lasting impression
 # here: add ALL weapons for the dropdown menu
 wp = ["Cataclysmic",
     "Stormchaser",
@@ -308,6 +449,7 @@ wp = ["Cataclysmic",
     "Blowout",
     "Roar Of The Bear",
     "Hezen Vengeance",
+    "Code Duello",
     "RedHerring",
     "Royal Entry",
     "Bump In The Night",
@@ -339,5 +481,5 @@ root.mainloop()
 #
 # Add more weapons buffs:
 # Golden Tricorn and Explosive light can be done as dropdown, or Radiobutton with 3 options (x0, x1, x2)
-
+# scale sections to be 25% of page
 ######################################################################

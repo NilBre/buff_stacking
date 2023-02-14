@@ -502,4 +502,17 @@ root.mainloop()
 # Add more weapons buffs:
 # Golden Tricorn and Explosive light can be done as dropdown, or Radiobutton with 3 options (x0, x1, x2)
 # scale sections to be 25% of page
+#
+# whenever i add a new perK, do the followinf steps
+# 1. add new Cvar<new_value> = IntVar()
+# 2. add it to the undo() method to be colored black
+# 3. add a Radiobutton or Checkbutton for the perk
+# 4. add it to isChecked() method as Cvar(...).get()
+# 5. append it to multipliers if value == 1
+#
+#
+# whener i add a new weapon do the following steps:
+# 1. add it to "wp" list
+# 2. make a function which colors its perks
+# 3. add it to Select_Weapon() method
 ######################################################################

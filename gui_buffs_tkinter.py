@@ -216,7 +216,7 @@ def isChecked():
         multipliers = np.append(multipliers, 1.25) # Full Court (max = 25 %)
     if value19 == 1:
         multipliers = np.append(multipliers, 1.3) # Adagio: +30 % dmg, -20 % fire rate
-    if value19 == 1:
+    if value20 == 1:
         multipliers = np.append(multipliers, 1.19) # lasting impression: + 30 % explosion dmg -> 19% overall
     if Svar0.get() == "Stormchaser" or Svar0.get() == "Fire and Forget":
         window.L5.configure(text=f"{round(float(base_damage) * np.prod(multipliers), 1)} ({round(float(base_damage) * np.prod(multipliers)  * 3, 1)})")
@@ -226,6 +226,7 @@ def isChecked():
     # print(base_damage)
 
 def Select_Weapon():
+    undo()
     print("selected weapon: " + Svar0.get())
     ### --- python version older than 3.10 (don't know switch cases)
     # if Svar0.get() == "Cataclysmic":
@@ -303,12 +304,31 @@ def Select_Weapon():
             window.L3.configure(text="39155")
             typhon_perks()
     isChecked()
-#     undo()
-#
-# def undo():
-#     for i in range(19):
-#         label = window.C1
-#         label.config(fg='black')
+    # test_color()
+
+def undo():
+    # ich habe kein bock mehr jetzt, brute force
+    # set every checkbutton to black
+    # what is the elegant way???
+    window.C0.config(fg="black")
+    window.C1.config(fg="black")
+    window.C2.config(fg="black")
+    window.C3.config(fg="black")
+    window.C4.config(fg="black")
+    window.C5.config(fg="black")
+    window.C6.config(fg="black")
+    window.C7.config(fg="black")
+    window.C8.config(fg="black")
+    window.C9.config(fg="black")
+    window.C10.config(fg="black")
+    window.C11.config(fg="black")
+    window.C12.config(fg="black")
+    window.C13.config(fg="black")
+    window.C14.config(fg="black")
+    window.C15.config(fg="black")
+    window.C16.config(fg="black")
+    window.C17.config(fg="black")
+    window.C18.config(fg="black")
 
 def cataclysmic_perks():
     window.C1.config(fg="green")

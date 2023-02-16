@@ -25,7 +25,7 @@ class Window():
         self.L1 = Label(self.section0_1, text="Name")
         self.L1.pack(padx=4, pady=4)
 
-        self.M0 = OptionMenu(self.section0_1, Svar0, *wp)
+        self.M0 = OptionMenu(self.section0_1, Svar0, *list(wp_attributes.keys()))
         self.M0.pack(padx=4, pady=4)
 
         self.L2 = Label(self.section0_1, text = "Base Damage (Single Bullet)")
@@ -34,17 +34,23 @@ class Window():
         self.L3 = Label(self.section0_1, text = f"0")
         self.L3.pack(padx=4, pady=4)
 
-        self.L4 = Label(self.section0_1, text = "Amplified Damage")
+        self.L4 = Label(self.section0_1, text = "DPS")
         self.L4.pack(padx=4, pady=4)
 
         self.L5 = Label(self.section0_1, text = f"0")
         self.L5.pack(padx=4, pady=4)
 
+        self.L6 = Label(self.section0_1, text = "Amplified Damage")
+        self.L6.pack(padx=4, pady=4)
+
+        self.L7 = Label(self.section0_1, text = f"0")
+        self.L7.pack(padx=4, pady=4)
+
         self.Button = Button(self.section0_1, text="Select Weapon", command=Select_Weapon)
         self.Button.pack(padx=4, pady=4)
 
-        self.L6 = Label(self.section0_1, text = f"Damage Multiplier: {round((np.prod(multiplier) - 1) * 100, 1)} in %")  # this needs to be updated
-        self.L6.pack(padx=4, pady=4)
+        self.L8 = Label(self.section0_1, text = f"Damage Multiplier: {round((np.prod(multiplier) - 1) * 100, 1)} in %")  # this needs to be updated
+        self.L8.pack(padx=4, pady=4)
 
         self.section0_1.pack(padx=4, pady=4)
         # --- subsection 0_1
@@ -55,8 +61,8 @@ class Window():
         # --- section 1
         self.section1 = Frame(self.Main)
 
-        self.L7 = Label(self.section1, text="EMPOWERING BUFFS")
-        self.L7.pack(padx=4, pady=4)
+        self.L9 = Label(self.section1, text="EMPOWERING BUFFS")
+        self.L9.pack(padx=4, pady=4)
 
         self.R0 = Radiobutton(self.section1, text="No Empowering Buff", variable = Rvar0, value = 0, command = isChecked)
         self.R0.pack(padx=4, pady=4)
@@ -74,6 +80,9 @@ class Window():
 
         # --- section 2
         self.section2 = Frame(self.Main)
+
+        self.L10 = Label(self.section1, text="WEAPON- AND MOD BUFFS")
+        self.L10.pack(padx=4, pady=4)
 
         self.C0 = Checkbutton(self.section2, text = "Font of Might", variable = Cvar2, command = isChecked)
         self.C0.pack(padx=4, pady=4)
@@ -219,15 +228,25 @@ def isChecked():
     if value20 == 1:
         multipliers = np.append(multipliers, 1.19) # lasting impression: + 30 % explosion dmg -> 19% overall
     if Svar0.get() == "Stormchaser" or Svar0.get() == "Fire and Forget":
-        window.L5.configure(text=f"{round(float(base_damage) * np.prod(multipliers), 1)} ({round(float(base_damage) * np.prod(multipliers)  * 3, 1)})")
+        window.L7.configure(text=f"{round(float(base_damage) * np.prod(multipliers), 1)} ({round(float(base_damage) * np.prod(multipliers)  * 3, 1)})")
     if Svar0.get() != "Stormchaser" and Svar0.get() != "Fire and Forget":
-        window.L5.configure(text=f"{round(float(base_damage) * np.prod(multipliers), 1)}")
-    window.L6.configure(text=f"Damage Multiplier: {round((np.prod(multipliers) - 1) * 100, 1)} in %")
-    # print(base_damage)
+        window.L7.configure(text=f"{round(float(base_damage) * np.prod(multipliers), 1)}")
+    window.L8.configure(text=f"Damage Multiplier: {round((np.prod(multipliers) - 1) * 100, 1)} in %")
+
+    Calculate_DPS()
+
+def Calculate_DPS():
+    amp_damage = window.L7.cget("text")
+    print("momentary weapon:", Svar0.get())
+    print("current charge time:", wp_attributes[Svar0.get()] * 1e-3, "second(s)")
+    print("time to release shot roughly", 0.1, "second(s)")
+    print("rate of fire =", wp_attributes[Svar0.get()] * 1e-3 + 0.1, "Shots/second")
+    window.L5.configure(text=f"{round(float(amp_damage) / (wp_attributes[Svar0.get()] * 1e-3 + 0.1), 1)} DPS")
+
 
 def Select_Weapon():
     undo()
-    print("selected weapon: " + Svar0.get())
+    # print("selected weapon: " + Svar0.get())
     ### --- python version older than 3.10 (don't know switch cases)
     # if Svar0.get() == "Cataclysmic":
     #     window.L3.configure(text="56586")
@@ -242,6 +261,7 @@ def Select_Weapon():
     match Svar0.get():
         case "Cataclysmic":
             window.L3.configure(text="56586")
+            # print("which case of svar0: ", Svar0.get(), wp_attributes[Svar0.get()], float(base_damage))
             cataclysmic_perks()
         case "Stormchaser":
             window.L3.configure(text="27704") # times 3
@@ -458,31 +478,31 @@ Cvar18 = IntVar() # Full Court
 Cvar19 = IntVar() # Adagio
 Cvar20 = IntVar() # lasting impression
 # here: add ALL weapons for the dropdown menu
-wp = ["Cataclysmic",
-    "Stormchaser",
-    "Fire and Forget",
-    "Reed's Regret",
-    "Sailspy Pitchglass",
-    "Taipan 4FR",
-    "Threaded Needle",
-    "The Hothead",
-    "Blowout",
-    "Roar Of The Bear",
-    "Hezen Vengeance",
-    "Code Duello",
-    "RedHerring",
-    "Royal Entry",
-    "Bump In The Night",
-    "Palmyra-B",
-    "Wendigo GL3",
-    "Interference VI",
-    "Tarnation",
-    "Cry Mutiny",
-    "Typhon GL5",
-    ]
+wp_attributes = {"Cataclysmic": 533,
+    "Stormchaser": 533,
+    "Fire and Forget": 533,
+    "Reed's Regret": 533,
+    "Sailspy Pitchglass": 533,
+    "Taipan 4FR": 533,
+    "Threaded Needle": 533,
+    "The Hothead": 533,
+    "Blowout": 533,
+    "Roar Of The Bear": 533,
+    "Hezen Vengeance": 533,
+    "Code Duello": 533,
+    "RedHerring": 533,
+    "Royal Entry": 533,
+    "Bump In The Night": 533,
+    "Palmyra-B": 533,
+    "Wendigo GL3": 533,
+    "Interference VI": 533,
+    "Tarnation": 533,
+    "Cry Mutiny": 533,
+    "Typhon GL5": 533,
+    }
 
 Svar0 = StringVar(root)
-Svar0.set(wp[0])
+Svar0.set(list(wp_attributes.keys())[0])
 
 # make Radiobutton for empowering buff and debuff options
 Rvar0 = IntVar()

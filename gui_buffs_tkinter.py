@@ -7,8 +7,11 @@ from tkinter import *
 #import mysql.connector
 
 class Window():
-    def __init__(self, master):
+    def __init__(self, master, LFR_reload_speed, Rocket_reload_speed, GL_reload_speed):
         self.master = master
+        self.LFR_reload_speed = LFR_reload_speed
+        self.Rocket_reload_speed = Rocket_reload_speed
+        self.GL_reload_speed = GL_reload_speed
         self.Main = Frame(self.master)  # ---> define main
 
         multiplier = [1]
@@ -228,21 +231,43 @@ def isChecked():
     if value20 == 1:
         multipliers = np.append(multipliers, 1.19) # lasting impression: + 30 % explosion dmg -> 19% overall
     if Svar0.get() == "Stormchaser" or Svar0.get() == "Fire and Forget":
+        # instead of writing 2 things in it
+        # make 2 labels beside each other
+        # that way i can take each one and calculate DPS separately
+        # do it with sub sections
         window.L7.configure(text=f"{round(float(base_damage) * np.prod(multipliers), 1)} ({round(float(base_damage) * np.prod(multipliers)  * 3, 1)})")
     if Svar0.get() != "Stormchaser" and Svar0.get() != "Fire and Forget":
         window.L7.configure(text=f"{round(float(base_damage) * np.prod(multipliers), 1)}")
     window.L8.configure(text=f"Damage Multiplier: {round((np.prod(multipliers) - 1) * 100, 1)} in %")
-
     Calculate_DPS()
 
 def Calculate_DPS():
+    ### make n_rockets and n_GL_shots into a slider
+    n_rockets = 3
     amp_damage = window.L7.cget("text")
     print("momentary weapon:", Svar0.get())
-    print("current charge time:", wp_attributes[Svar0.get()] * 1e-3, "second(s)")
-    print("time to release shot roughly", 0.1, "second(s)")
-    print("rate of fire =", wp_attributes[Svar0.get()] * 1e-3 + 0.1, "Shots/second")
-    window.L5.configure(text=f"{round(float(amp_damage) / (wp_attributes[Svar0.get()] * 1e-3 + 0.1), 1)} DPS")
+    # print("current charge time:", wp_attributes[Svar0.get()] * 1e-3, "second(s)")
+    # print("time to release shot roughly", 0.1, "second(s)")
+    # print("rate of fire =", wp_attributes[Svar0.get()] * 1e-3 + 0.1, "Shots/second")
+    # 1e-3 charge time in seconds, + 0.1 time for shooting
+    if Svar0.get() in LFRs:
+        window.L5.configure(text=f"{round(float(amp_damage) / (wp_attributes[Svar0.get()] * 1e-3 + 0.1) , 1)} DPS")
+        # print(wp_attributes[Svar0.get()] * 1e-3 + 0.1)
+    if Svar0.get() in Rockets:
+        window.L5.configure(text=f"{rocket_dps(n_rockets)} DPS for {n_rockets} rockets")
+        # print(wp_attributes[Svar0.get()])
+    if Svar0.get() in GLs:
+        window.L5.configure(text=f"{round(float(amp_damage) * (wp_attributes[Svar0.get()] / 60), 1)} DPS")
+        # print("rounds per second", wp_attributes[Svar0.get()] / 60)
 
+def rocket_dps(n_rockets):
+    base_rocket_dmg = window.L7.cget("text")
+    if n_rockets == 0:
+        return 0
+    elif n_rockets == 1:
+        return round(float(base_rocket_dmg), 1)
+    else:
+        return ((n_rockets + 1) * round(float(base_rocket_dmg), 1)) / (window.Rocket_reload_speed * n_rockets)
 
 def Select_Weapon():
     undo()
@@ -261,7 +286,6 @@ def Select_Weapon():
     match Svar0.get():
         case "Cataclysmic":
             window.L3.configure(text="56586")
-            # print("which case of svar0: ", Svar0.get(), wp_attributes[Svar0.get()], float(base_damage))
             cataclysmic_perks()
         case "Stormchaser":
             window.L3.configure(text="27704") # times 3
@@ -316,7 +340,7 @@ def Select_Weapon():
             interference_perks()
         case "Tarnation":
             window.L3.configure(text="31880")
-            tarnation_impact()
+            # tarnation_impact()
         case "Cry Mutiny":
             window.L3.configure(text="35411")
             cry_mutiny_perks()
@@ -485,21 +509,26 @@ wp_attributes = {"Cataclysmic": 533,
     "Sailspy Pitchglass": 533,
     "Taipan 4FR": 533,
     "Threaded Needle": 533,
-    "The Hothead": 533,
-    "Blowout": 533,
-    "Roar Of The Bear": 533,
-    "Hezen Vengeance": 533,
-    "Code Duello": 533,
-    "RedHerring": 533,
-    "Royal Entry": 533,
-    "Bump In The Night": 533,
-    "Palmyra-B": 533,
-    "Wendigo GL3": 533,
-    "Interference VI": 533,
-    "Tarnation": 533,
-    "Cry Mutiny": 533,
-    "Typhon GL5": 533,
+    "The Hothead": 20,
+    "Blowout": 20,
+    "Roar Of The Bear": 15,
+    "Hezen Vengeance": 25,
+    "Code Duello": 15,
+    "RedHerring": 20,
+    "Royal Entry": 15,
+    "Bump In The Night": 25,
+    "Palmyra-B": 15,
+    "Wendigo GL3": 120,
+    "Interference VI": 120,
+    "Tarnation": 150,
+    "Cry Mutiny": 120,
+    "Typhon GL5": 120,
     }
+
+weapon_list = list(wp_attributes.keys())
+LFRs = weapon_list[:7]
+Rockets = weapon_list[7:16]
+GLs = weapon_list[16:21]
 
 Svar0 = StringVar(root)
 Svar0.set(list(wp_attributes.keys())[0])
@@ -508,7 +537,7 @@ Svar0.set(list(wp_attributes.keys())[0])
 Rvar0 = IntVar()
 Rvar1 = IntVar()
 
-window = Window(root)
+window = Window(root, 3.6, 3.0, 3.14) # unit for reload speed is seconds
 
 root.mainloop()
 

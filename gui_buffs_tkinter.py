@@ -37,55 +37,82 @@ class Window():
         self.L3 = Label(self.section0_1, text = f"0")
         self.L3.pack(padx=4, pady=4)
 
-        self.L4 = Label(self.section0_1, text = "DPS")
-        self.L4.pack(padx=4, pady=4)
-
         # --- subsection 0_2
-        self.section0_2 = Frame(self.section0_1)
-
-        self.S0 = Scale(self.section0_2, from_=0, to_=7, orient=HORIZONTAL)
-        self.S0.pack(padx=4, pady=4)
-
-        self.section0_2.pack(padx=4, pady=4)
+        # self.section0_2 = Frame(self.section0_1)
+        # self.section0_2.pack(padx=4, pady=4)
         # --- subsecton 0_2
 
-        self.L5 = Label(self.section0_1, text = f"0")
-        self.L5.pack(padx=4, pady=4)
+        # self.L5 = Label(self.section0_1, text = f"0")
+        # self.L5.pack(padx=4, pady=4)
 
         self.L6 = Label(self.section0_1, text = "Amplified Damage")
         self.L6.pack(padx=4, pady=4)
 
-        self.L7 = Label(self.section0_1, text = f"0")
-        self.L7.pack(padx=4, pady=4)
+        # --- subsection0_1_1
+        self.section0_1_1 = Frame(self.section0_1)
 
-        self.Button = Button(self.section0_1, text="Select Weapon", command=Select_Weapon)
-        self.Button.pack(padx=4, pady=4)
+        # L7 is for every weapon, L7_1 for 3 burst linear fusions
+        self.L7 = Label(self.section0_1_1, text = f"0")
+        self.L7.pack(padx=4, pady=4, side=LEFT)
+
+        self.L7_1 = Label(self.section0_1_1, text = f"0")
+        self.L7_1.pack(padx=4, pady=4, side=LEFT)
+
+        self.section0_1_1.pack(padx=4, pady=4)
+        # --- subsection0_1_1
 
         self.L8 = Label(self.section0_1, text = f"Damage Multiplier: {round((np.prod(multiplier) - 1) * 100, 1)} in %")  # this needs to be updated
         self.L8.pack(padx=4, pady=4)
 
+        self.Button = Button(self.section0_1, text="Select Weapon", command=Select_Weapon)
+        self.Button.pack(padx=4, pady=4)
+
         self.section0_1.pack(padx=4, pady=4)
         # --- subsection 0_1
-
         self.section0.pack(padx=4, pady=4, expand=True, fill=X, side=LEFT)
         # --- section 0
 
         # --- section 1
         self.section1 = Frame(self.Main)
 
-        self.L9 = Label(self.section1, text="EMPOWERING BUFFS")
-        self.L9.pack(padx=4, pady=4)
+        self.L11 = Label(self.section1, text="DPS VALUES")
+        self.L11.pack(padx=4, pady=4)
 
-        self.R0 = Radiobutton(self.section1, text="No Empowering Buff", variable = Rvar0, value = 0, command = isChecked)
-        self.R0.pack(padx=4, pady=4)
-        self.R1 = Radiobutton(self.section1, text="Bannershield", variable = Rvar0, value = 1, command = isChecked)
-        self.R1.pack(padx=4, pady=4)
-        self.R2 = Radiobutton(self.section1, text="Lumina / Lucent Blade", variable = Rvar0, value = 2, command = isChecked)
-        self.R2.pack(padx=4, pady=4)
-        self.R3 = Radiobutton(self.section1, text="Well / Bubble", variable = Rvar0, value = 3, command = isChecked)
-        self.R3.pack(padx=4, pady=4)
-        self.R4 = Radiobutton(self.section1, text="Empowering Rift / Mantle of. B. H.", variable = Rvar0, value = 4, command = isChecked)
-        self.R4.pack(padx=4, pady=4)
+        self.L12 = Label(self.section1, text="Linear Fusion DPS")
+        self.L12.pack(padx=4, pady=4)
+
+        self.S0 = Scale(self.section1, from_=0, to_=3, orient=HORIZONTAL)
+        self.S0.pack(padx=4, pady=4)
+
+        # --- subsection1_1
+        self.section1_1 = Frame(self.section1)
+
+        self.L13 = Label(self.section1_1, text="0")
+        self.L13.pack(padx=4, pady=4)
+
+        self.L13_1 = Label(self.section1_1, text="0")
+        self.L13_1.pack(padx=4, pady=4)
+
+        self.section1_1.pack(padx=4, pady=4)
+        # --- subsection1_1
+
+        self.L14 = Label(self.section1, text="Rocketlauncher DPS")
+        self.L14.pack(padx=4, pady=4)
+
+        self.S1 = Scale(self.section1, from_=0, to_=7, orient=HORIZONTAL)
+        self.S1.pack(padx=4, pady=4)
+
+        self.L15 = Label(self.section1, text="0")
+        self.L15.pack(padx=4, pady=4)
+
+        self.L16 = Label(self.section1, text="Grenadelauncher DPS")
+        self.L16.pack(padx=4, pady=4)
+
+        self.S2 = Scale(self.section1, from_=0, to_=3, orient=HORIZONTAL)
+        self.S2.pack(padx=4, pady=4)
+
+        self.L17 = Label(self.section1, text="0")
+        self.L17.pack(padx=4, pady=4)
 
         self.section1.pack(padx=4, pady=4, expand=True, fill=X, side=LEFT)
         # --- section 1
@@ -93,7 +120,7 @@ class Window():
         # --- section 2
         self.section2 = Frame(self.Main)
 
-        self.L10 = Label(self.section1, text="WEAPON- AND MOD BUFFS")
+        self.L10 = Label(self.section2, text="WEAPON- AND MOD BUFFS")
         self.L10.pack(padx=4, pady=4)
 
         self.C0 = Checkbutton(self.section2, text = "Font of Might", variable = Cvar2, command = isChecked)
@@ -140,20 +167,43 @@ class Window():
 
         # --- section 3
         self.section3 = Frame(self.Main)
+        # -- subsection3_1
+        self.section3_1 = Frame(self.section3)
 
-        self.L50 = Label(self.section3, text="DEBUFFS")
+        self.L9 = Label(self.section3_1, text="EMPOWERING BUFFS")
+        self.L9.pack(padx=4, pady=4)
+
+        self.R0 = Radiobutton(self.section3_1, text="No Empowering Buff", variable = Rvar0, value = 0, command = isChecked)
+        self.R0.pack(padx=4, pady=4)
+        self.R1 = Radiobutton(self.section3_1, text="Bannershield", variable = Rvar0, value = 1, command = isChecked)
+        self.R1.pack(padx=4, pady=4)
+        self.R2 = Radiobutton(self.section3_1, text="Lumina / Lucent Blade", variable = Rvar0, value = 2, command = isChecked)
+        self.R2.pack(padx=4, pady=4)
+        self.R3 = Radiobutton(self.section3_1, text="Well / Bubble", variable = Rvar0, value = 3, command = isChecked)
+        self.R3.pack(padx=4, pady=4)
+        self.R4 = Radiobutton(self.section3_1, text="Empowering Rift / Mantle of. B. H.", variable = Rvar0, value = 4, command = isChecked)
+        self.R4.pack(padx=4, pady=4)
+
+        self.section3_1.pack(padx=4, pady=4)
+        # --- subsection3_1
+
+        # --- subsection3_2
+        self.section3_2 = Frame(self.section3)
+
+        self.L50 = Label(self.section3_2, text="DEBUFFS")
         self.L50.pack(padx=4, pady=4)
 
-        self.R10 = Radiobutton(self.section3, text="No Debuff", variable = Rvar1, value = 0, command = isChecked)
+        self.R10 = Radiobutton(self.section3_2, text="No Debuff", variable = Rvar1, value = 0, command = isChecked)
         self.R10.pack(padx=4, pady=4)
-        self.R11 = Radiobutton(self.section3, text="Weaken", variable = Rvar1, value = 1, command = isChecked)
+        self.R11 = Radiobutton(self.section3_2, text="Weaken", variable = Rvar1, value = 1, command = isChecked)
         self.R11.pack(padx=4, pady=4)
-        self.R12 = Radiobutton(self.section3, text="Full Debuff", variable = Rvar1, value = 2, command = isChecked)
+        self.R12 = Radiobutton(self.section3_2, text="Full Debuff", variable = Rvar1, value = 2, command = isChecked)
         self.R12.pack(padx=4, pady=4)
 
+        self.section3_2.pack(padx=4, pady=4)
+        # subsection3_2
         self.section3.pack(padx=4, pady=4, expand=True, fill=X, side=LEFT)
         # --- section 3
-
         self.Main.pack(padx=4, pady=4)
         # --- section Main
 
@@ -240,38 +290,63 @@ def isChecked():
     if value20 == 1:
         multipliers = np.append(multipliers, 1.19) # lasting impression: + 30 % explosion dmg -> 19% overall
     if Svar0.get() == "Stormchaser" or Svar0.get() == "Fire and Forget":
-        # instead of writing 2 things in it
-        # make 2 labels beside each other
-        # that way i can take each one and calculate DPS separately
-        # do it with sub sections
-        window.L7.configure(text=f"{round(float(base_damage) * np.prod(multipliers), 1)} ({round(float(base_damage) * np.prod(multipliers)  * 3, 1)})")
+        window.L7.configure(text=f"{round(float(base_damage) * np.prod(multipliers), 1)}")
+        window.L7_1.configure(text=f"{round(float(base_damage) * np.prod(multipliers) * 3, 1)}")
     if Svar0.get() != "Stormchaser" and Svar0.get() != "Fire and Forget":
         window.L7.configure(text=f"{round(float(base_damage) * np.prod(multipliers), 1)}")
+        window.L7_1.configure(text=f"")
     window.L8.configure(text=f"Damage Multiplier: {round((np.prod(multipliers) - 1) * 100, 1)} in %")
     Calculate_DPS()
 
 def Calculate_DPS():
-    ### make n_rockets and n_GL_shots into a slider
-    amp_damage = window.L7.cget("text")
+    # amp_damage = window.L7.cget("text")
+    # amp_damage_3burst = window.L7_1.cget("text")
     print("momentary weapon:", Svar0.get())
     if Svar0.get() in LFRs:
-        if Svar0.get() == "Stormchaser" or Svar0.get() == "Fire and Forget":
-            window.L5.configure(text=f"{round(float(amp_damage) / (wp_attributes[Svar0.get()] * 1e-3 + 0.1) , 1)} DPS")
         if Svar0.get() != "Stormchaser" and Svar0.get() != "Fire and Forget":
-            window.L5.configure(text=f"{round(float(amp_damage) / (wp_attributes[Svar0.get()] * 1e-3 + 0.1) , 1)} DPS")
+            window.L13_1.configure(text=f"{LFR_dps()[0]} DPS for {window.S0.get()} mag(s)")
+        if Svar0.get() == "Stormchaser" or Svar0.get() == "Fire and Forget":
+            window.L13.configure(text=f"{LFR_dps()[1]} DPS for {window.S0.get()} mag(s)")
     if Svar0.get() in Rockets:
-        window.L5.configure(text=f"{rocket_dps()} DPS for {window.S0.get()} rockets")
+        window.L15.configure(text=f"{rocket_dps()} DPS for {window.S1.get()} rockets")
     if Svar0.get() in GLs:
-        window.L5.configure(text=f"{round(float(amp_damage) * (wp_attributes[Svar0.get()] / 60), 1)} DPS")
+        window.L17.configure(text=f"{GL_dps()} DPS for {window.S2.get()} magazines")
+
+def LFR_dps():
+    base_mag = 5
+    base_LFR_dmg = window.L7.cget("text")
+    base_LFR_dmg_3burst = window.L7_1.cget("text")
+    if window.L7_1.cget("text") == "":
+        base_LFR_dmg_3burst = 0
+    else:
+        base_LFR_dmg_3burst = window.L7_1.cget("text")
+    if window.S0.get() == 0:
+        return 0, 0
+    else:
+        if window.S0.get() == 1:
+            return round(float(base_LFR_dmg) * (wp_attributes[Svar0.get()]  * 1e-3 + 0.1), 1), round(float(base_LFR_dmg_3burst) * (wp_attributes[Svar0.get()]  * 1e-3 + 0.1), 1)
+        else:
+            return round(window.S0.get() * base_mag * float(base_LFR_dmg) / (window.S0.get() * (wp_attributes[Svar0.get()]  * 1e-3 + 0.1) + window.LFR_reload_speed), 1), round(window.S0.get() * base_mag * float(base_LFR_dmg_3burst) / (window.S0.get() * (wp_attributes[Svar0.get()]  * 1e-3 + 0.1) + window.LFR_reload_speed), 1)
 
 def rocket_dps():
     base_rocket_dmg = window.L7.cget("text")
-    if window.S0.get() == 0:
+    if window.S1.get() == 0:
         return 0
-    elif window.S0.get() == 1:
+    elif window.S1.get() == 1:
         return round(float(base_rocket_dmg), 1)
     else:
-        return round(((window.S0.get() + 1) * round(float(base_rocket_dmg), 1)) / (window.Rocket_reload_speed * window.S0.get()), 1)
+        return round(((window.S1.get() + 1) * round(float(base_rocket_dmg), 1)) / (window.Rocket_reload_speed * window.S1.get()), 1)
+
+def GL_dps():
+    base_mag = 7
+    base_GL_dmg = window.L7.cget("text")
+    if window.S2.get() == 0:
+        return 0
+    else:
+        if window.S2.get() == 1:
+            return round(float(base_GL_dmg) * (wp_attributes[Svar0.get()] / 60), 1)
+        else:
+            return round(window.S2.get() * base_mag * float(base_GL_dmg) / (window.S2.get() * (wp_attributes[Svar0.get()] / 60) + GL_reload_speed), 1)
 
 def Select_Weapon():
     undo()
@@ -325,7 +400,7 @@ def Select_Weapon():
             window.L3.configure(text="84309")
             code_duello_perks()
         case "RedHerring":
-            window.L3.configure(text="1")
+            window.L3.configure(text="98208")
             red_herring_perks()
         case "Royal Entry":
             window.L3.configure(text="80352")
@@ -337,7 +412,7 @@ def Select_Weapon():
             window.L3.configure(text="80352")
             palmyra_perks()
         case "Wendigo GL3":
-            window.L3.configure(text="1")
+            window.L3.configure(text="39531")
             wendigo_perks()
         case "Interference VI":
             window.L3.configure(text="39382") # min = 39382, max = 46157
@@ -355,9 +430,27 @@ def Select_Weapon():
     # test_color()
 
 def undo():
-    # ich habe kein bock mehr jetzt, brute force
-    # set every checkbutton to black
-    # what is the elegant way???
+    # uncheck all checkboxes for the user
+    Cvar2.set(0)
+    Cvar3.set(0)
+    Cvar4.set(0)
+    Cvar5.set(0)
+    Cvar6.set(0)
+    Cvar7.set(0)
+    Cvar8.set(0)
+    Cvar9.set(0)
+    Cvar10.set(0)
+    Cvar11.set(0)
+    Cvar12.set(0)
+    Cvar13.set(0)
+    Cvar14.set(0)
+    Cvar15.set(0)
+    Cvar16.set(0)
+    Cvar17.set(0)
+    Cvar18.set(0)
+    Cvar19.set(0)
+    Cvar20.set(0)
+    # change all window colors
     window.C0.config(fg="black")
     window.C1.config(fg="black")
     window.C2.config(fg="black")
@@ -561,7 +654,7 @@ root.mainloop()
 # 2. make a function which colors its perks
 # 3. add it to Select_Weapon() method
 #
-# implement the calculate_dps() method into is checked
+# implement the calculate_dps() method into ischecked
 # to reduce redundancy
 #
 # fix slider with isChecked method

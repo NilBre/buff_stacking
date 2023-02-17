@@ -40,6 +40,15 @@ class Window():
         self.L4 = Label(self.section0_1, text = "DPS")
         self.L4.pack(padx=4, pady=4)
 
+        # --- subsection 0_2
+        self.section0_2 = Frame(self.section0_1)
+
+        self.S0 = Scale(self.section0_2, from_=0, to_=7, orient=HORIZONTAL)
+        self.S0.pack(padx=4, pady=4)
+
+        self.section0_2.pack(padx=4, pady=4)
+        # --- subsecton 0_2
+
         self.L5 = Label(self.section0_1, text = f"0")
         self.L5.pack(padx=4, pady=4)
 
@@ -243,31 +252,26 @@ def isChecked():
 
 def Calculate_DPS():
     ### make n_rockets and n_GL_shots into a slider
-    n_rockets = 3
     amp_damage = window.L7.cget("text")
     print("momentary weapon:", Svar0.get())
-    # print("current charge time:", wp_attributes[Svar0.get()] * 1e-3, "second(s)")
-    # print("time to release shot roughly", 0.1, "second(s)")
-    # print("rate of fire =", wp_attributes[Svar0.get()] * 1e-3 + 0.1, "Shots/second")
-    # 1e-3 charge time in seconds, + 0.1 time for shooting
     if Svar0.get() in LFRs:
-        window.L5.configure(text=f"{round(float(amp_damage) / (wp_attributes[Svar0.get()] * 1e-3 + 0.1) , 1)} DPS")
-        # print(wp_attributes[Svar0.get()] * 1e-3 + 0.1)
+        if Svar0.get() == "Stormchaser" or Svar0.get() == "Fire and Forget":
+            window.L5.configure(text=f"{round(float(amp_damage) / (wp_attributes[Svar0.get()] * 1e-3 + 0.1) , 1)} DPS")
+        if Svar0.get() != "Stormchaser" and Svar0.get() != "Fire and Forget":
+            window.L5.configure(text=f"{round(float(amp_damage) / (wp_attributes[Svar0.get()] * 1e-3 + 0.1) , 1)} DPS")
     if Svar0.get() in Rockets:
-        window.L5.configure(text=f"{rocket_dps(n_rockets)} DPS for {n_rockets} rockets")
-        # print(wp_attributes[Svar0.get()])
+        window.L5.configure(text=f"{rocket_dps()} DPS for {window.S0.get()} rockets")
     if Svar0.get() in GLs:
         window.L5.configure(text=f"{round(float(amp_damage) * (wp_attributes[Svar0.get()] / 60), 1)} DPS")
-        # print("rounds per second", wp_attributes[Svar0.get()] / 60)
 
-def rocket_dps(n_rockets):
+def rocket_dps():
     base_rocket_dmg = window.L7.cget("text")
-    if n_rockets == 0:
+    if window.S0.get() == 0:
         return 0
-    elif n_rockets == 1:
+    elif window.S0.get() == 1:
         return round(float(base_rocket_dmg), 1)
     else:
-        return ((n_rockets + 1) * round(float(base_rocket_dmg), 1)) / (window.Rocket_reload_speed * n_rockets)
+        return round(((window.S0.get() + 1) * round(float(base_rocket_dmg), 1)) / (window.Rocket_reload_speed * window.S0.get()), 1)
 
 def Select_Weapon():
     undo()
@@ -501,6 +505,7 @@ Cvar17 = IntVar() # Explosive Light (Rockets)
 Cvar18 = IntVar() # Full Court
 Cvar19 = IntVar() # Adagio
 Cvar20 = IntVar() # lasting impression
+
 # here: add ALL weapons for the dropdown menu
 wp_attributes = {"Cataclysmic": 533,
     "Stormchaser": 533,
@@ -533,7 +538,6 @@ GLs = weapon_list[16:21]
 Svar0 = StringVar(root)
 Svar0.set(list(wp_attributes.keys())[0])
 
-# make Radiobutton for empowering buff and debuff options
 Rvar0 = IntVar()
 Rvar1 = IntVar()
 
@@ -542,26 +546,25 @@ window = Window(root, 3.6, 3.0, 3.14) # unit for reload speed is seconds
 root.mainloop()
 
 ################ TODO ###############################################
-# for empowering buffs: group them by buff% for each layer, like:
-# 40 %: banner shield
-# 35 %: lumina, lucent blade
-# 25 %: well of radiance, weapons of light, radiant
-# 20 %: empowering rift, High Energy Fire, mantle of battle harmony
-#
 # Add more weapons buffs:
 # Golden Tricorn and Explosive light can be done as dropdown, or Radiobutton with 3 options (x0, x1, x2)
-# scale sections to be 25% of page
 #
-# whenever i add a new perK, do the followinf steps
+# whenever i add a new perk, do the following steps
 # 1. add new Cvar<new_value> = IntVar()
 # 2. add it to the undo() method to be colored black
 # 3. add a Radiobutton or Checkbutton for the perk
 # 4. add it to isChecked() method as Cvar(...).get()
 # 5. append it to multipliers if value == 1
 #
-#
 # whener i add a new weapon do the following steps:
 # 1. add it to "wp" list
 # 2. make a function which colors its perks
 # 3. add it to Select_Weapon() method
+#
+# implement the calculate_dps() method into is checked
+# to reduce redundancy
+#
+# fix slider with isChecked method
+#
+#
 ######################################################################

@@ -304,9 +304,11 @@ def Calculate_DPS():
     print("momentary weapon:", Svar0.get())
     if Svar0.get() in LFRs:
         if Svar0.get() != "Stormchaser" and Svar0.get() != "Fire and Forget":
-            window.L13_1.configure(text=f"{LFR_dps()[0]} DPS for {window.S0.get()} mag(s)")
+            window.L13.configure(text=f"{LFR_dps()[0]} DPS for {window.S0.get()} mag(s)")
+            window.L13_1.configure(text=f"")
         if Svar0.get() == "Stormchaser" or Svar0.get() == "Fire and Forget":
-            window.L13.configure(text=f"{LFR_dps()[1]} DPS for {window.S0.get()} mag(s)")
+            window.L13.configure(text=f"{LFR_dps()[0]} DPS for {window.S0.get()} mag(s)")
+            window.L13_1.configure(text=f"{LFR_dps()[1]} DPS for {window.S0.get()} mag(s)")
     if Svar0.get() in Rockets:
         window.L15.configure(text=f"{rocket_dps()} DPS for {window.S1.get()} rockets")
     if Svar0.get() in GLs:
@@ -323,10 +325,7 @@ def LFR_dps():
     if window.S0.get() == 0:
         return 0, 0
     else:
-        if window.S0.get() == 1:
-            return round(float(base_LFR_dmg) * (wp_attributes[Svar0.get()]  * 1e-3 + 0.1), 1), round(float(base_LFR_dmg_3burst) * (wp_attributes[Svar0.get()]  * 1e-3 + 0.1), 1)
-        else:
-            return round(window.S0.get() * base_mag * float(base_LFR_dmg) / (window.S0.get() * (wp_attributes[Svar0.get()]  * 1e-3 + 0.1) + window.LFR_reload_speed), 1), round(window.S0.get() * base_mag * float(base_LFR_dmg_3burst) / (window.S0.get() * (wp_attributes[Svar0.get()]  * 1e-3 + 0.1) + window.LFR_reload_speed), 1)
+        return round(base_mag * float(base_LFR_dmg) / (base_mag * ((wp_attributes[Svar0.get()] * 1e-3) + 0.2) + (window.S0.get() - 1) * window.LFR_reload_speed), 1), round(base_mag * float(base_LFR_dmg_3burst) / (base_mag * ((wp_attributes[Svar0.get()] * 1e-3) + 0.2) + (window.S0.get() - 1) * window.LFR_reload_speed), 1)
 
 def rocket_dps():
     base_rocket_dmg = window.L7.cget("text")
@@ -335,18 +334,16 @@ def rocket_dps():
     elif window.S1.get() == 1:
         return round(float(base_rocket_dmg), 1)
     else:
-        return round(((window.S1.get() + 1) * round(float(base_rocket_dmg), 1)) / (window.Rocket_reload_speed * window.S1.get()), 1)
+        return round((window.S1.get() * float(base_rocket_dmg)) / ((window.S1.get() - 1) * window.Rocket_reload_speed), 1)
 
 def GL_dps():
     base_mag = 7
+    time_for_mag = base_mag / (wp_attributes[Svar0.get()] / 60)
     base_GL_dmg = window.L7.cget("text")
     if window.S2.get() == 0:
         return 0
     else:
-        if window.S2.get() == 1:
-            return round(float(base_GL_dmg) * (wp_attributes[Svar0.get()] / 60), 1)
-        else:
-            return round(window.S2.get() * base_mag * float(base_GL_dmg) / (window.S2.get() * (wp_attributes[Svar0.get()] / 60) + GL_reload_speed), 1)
+        return round((window.S2.get() * float(base_GL_dmg) * base_mag) / (window.S2.get() * time_for_mag + (window.S2.get() - 1) * window.GL_reload_speed), 1)
 
 def Select_Weapon():
     undo()

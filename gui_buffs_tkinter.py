@@ -290,10 +290,10 @@ def isChecked():
     if value20 == 1:
         multipliers = np.append(multipliers, 1.19) # lasting impression: + 30 % explosion dmg -> 19% overall
     if Svar0.get() == "Stormchaser" or Svar0.get() == "Fire and Forget":
-        window.L7.configure(text=f"{round(float(base_damage) * np.prod(multipliers), 1)}")
-        window.L7_1.configure(text=f"{round(float(base_damage) * np.prod(multipliers) * 3, 1)}")
+        window.L7.configure(text=f"{round(wp_attributes[Svar0.get()]['base_dmg'] * np.prod(multipliers), 1)}")
+        window.L7_1.configure(text=f"{round(wp_attributes[Svar0.get()]['base_dmg'] * np.prod(multipliers) * 3, 1)}")
     if Svar0.get() != "Stormchaser" and Svar0.get() != "Fire and Forget":
-        window.L7.configure(text=f"{round(float(base_damage) * np.prod(multipliers), 1)}")
+        window.L7.configure(text=f"{round(wp_attributes[Svar0.get()]['base_dmg'] * np.prod(multipliers), 1)}")
         window.L7_1.configure(text=f"")
     window.L8.configure(text=f"Damage Multiplier: {round((np.prod(multipliers) - 1) * 100, 1)} in %")
     Calculate_DPS()
@@ -315,7 +315,6 @@ def Calculate_DPS():
         window.L17.configure(text=f"{GL_dps()} DPS for {window.S2.get()} magazines")
 
 def LFR_dps():
-    base_mag = 5
     base_LFR_dmg = window.L7.cget("text")
     base_LFR_dmg_3burst = window.L7_1.cget("text")
     if window.L7_1.cget("text") == "":
@@ -325,25 +324,24 @@ def LFR_dps():
     if window.S0.get() == 0:
         return 0, 0
     else:
-        return round(base_mag * float(base_LFR_dmg) / (base_mag * ((wp_attributes[Svar0.get()] * 1e-3) + 0.2) + (window.S0.get() - 1) * window.LFR_reload_speed), 1), round(base_mag * float(base_LFR_dmg_3burst) / (base_mag * ((wp_attributes[Svar0.get()] * 1e-3) + 0.2) + (window.S0.get() - 1) * window.LFR_reload_speed), 1)
+        return round(wp_attributes[Svar0.get()]['mag_size'] * wp_attributes[Svar0.get()]['base_dmg'] / (wp_attributes[Svar0.get()]['mag_size'] * ((wp_attributes[Svar0.get()]['charge_time'] * 1e-3) + 0.2) + (window.S0.get() - 1) * window.LFR_reload_speed), 1), round(wp_attributes[Svar0.get()]['mag_size'] * float(base_LFR_dmg_3burst) / (wp_attributes[Svar0.get()]['mag_size'] * ((wp_attributes[Svar0.get()]['charge_time'] * 1e-3) + 0.2) + (window.S0.get() - 1) * window.LFR_reload_speed), 1)
 
 def rocket_dps():
-    base_rocket_dmg = window.L7.cget("text")
+    # base_rocket_dmg = window.L7.cget("text")
     if window.S1.get() == 0:
         return 0
     elif window.S1.get() == 1:
-        return round(float(base_rocket_dmg), 1)
+        return round(wp_attributes[Svar0.get()]['base_dmg'], 1)
     else:
-        return round((window.S1.get() * float(base_rocket_dmg)) / ((window.S1.get() - 1) * window.Rocket_reload_speed), 1)
+        return round((window.S1.get() * wp_attributes[Svar0.get()]['base_dmg']) / ((window.S1.get() - 1) * window.Rocket_reload_speed), 1)
 
 def GL_dps():
-    base_mag = 7
-    time_for_mag = base_mag / (wp_attributes[Svar0.get()] / 60)
+    time_for_mag = wp_attributes[Svar0.get()]['mag_size'] / (wp_attributes[Svar0.get()]['rpm'] / 60)
     base_GL_dmg = window.L7.cget("text")
     if window.S2.get() == 0:
         return 0
     else:
-        return round((window.S2.get() * float(base_GL_dmg) * base_mag) / (window.S2.get() * time_for_mag + (window.S2.get() - 1) * window.GL_reload_speed), 1)
+        return round((window.S2.get() * wp_attributes[Svar0.get()]['base_dmg'] * wp_attributes[Svar0.get()]['mag_size']) / (window.S2.get() * time_for_mag + (window.S2.get() - 1) * window.GL_reload_speed), 1)
 
 def Select_Weapon():
     undo()
@@ -361,92 +359,92 @@ def Select_Weapon():
     # damage numbers are for minibosses
     match Svar0.get():
         case "Cataclysmic":
-            window.L3.configure(text="56586")
+            window.L3.configure(text=f"{wp_attributes[Svar0.get()]['base_dmg']}")
             cataclysmic_perks()
         case "Stormchaser":
-            window.L3.configure(text="27704") # times 3
+            window.L3.configure(text=f"{wp_attributes[Svar0.get()]['base_dmg']}") # times 3
             stormchaser_perks()
         case "Fire and Forget":
-            window.L3.configure(text="28258") # times 3
+            window.L3.configure(text=f"{wp_attributes[Svar0.get()]['base_dmg']}") # times 3
             fire_and_forget_perks()
         case "Reed's Regret":
-            window.L3.configure(text="57822")
+            window.L3.configure(text=f"{wp_attributes[Svar0.get()]['base_dmg']}")
             reeds_regret_perks()
         case "Sailspy Pitchglass":
-            window.L3.configure(text="58356")
+            window.L3.configure(text=f"{wp_attributes[Svar0.get()]['base_dmg']}")
             saispy_pitchglass_perks()
         case "Taipan 4FR":
-            window.L3.configure(text="58356")
+            window.L3.configure(text=f"{wp_attributes[Svar0.get()]['base_dmg']}")
             taipan_perks()
         case "Threaded Needle":
-            window.L3.configure(text="58356")
+            window.L3.configure(text=f"{wp_attributes[Svar0.get()]['base_dmg']}")
             threaded_needle_perks()
         case "The Hothead":
-            window.L3.configure(text="98208")
+            window.L3.configure(text=f"{wp_attributes[Svar0.get()]['base_dmg']}")
             hothead_perks()
         case "Blowout":
-            window.L3.configure(text="98209")
+            window.L3.configure(text=f"{wp_attributes[Svar0.get()]['base_dmg']}")
             blowout_perks()
         case "Roar Of The Bear":
-            window.L3.configure(text="84309")
+            window.L3.configure(text=f"{wp_attributes[Svar0.get()]['base_dmg']}")
             roar_of_the_bear_perks()
         case "Hezen Vengeance":
-            window.L3.configure(text="98209")
+            window.L3.configure(text=f"{wp_attributes[Svar0.get()]['base_dmg']}")
             hezen_vengeance_perks()
         case "Code Duello":
-            window.L3.configure(text="84309")
+            window.L3.configure(text=f"{wp_attributes[Svar0.get()]['base_dmg']}")
             code_duello_perks()
         case "RedHerring":
-            window.L3.configure(text="98208")
+            window.L3.configure(text=f"{wp_attributes[Svar0.get()]['base_dmg']}")
             red_herring_perks()
         case "Royal Entry":
-            window.L3.configure(text="80352")
+            window.L3.configure(text=f"{wp_attributes[Svar0.get()]['base_dmg']}")
             royal_entry_perks()
         case "Bump In The Night":
-            window.L3.configure(text="98209")
+            window.L3.configure(text=f"{wp_attributes[Svar0.get()]['base_dmg']}")
             bump_in_the_night_perks()
         case "Palmyra-B":
-            window.L3.configure(text="80352")
+            window.L3.configure(text=f"{wp_attributes[Svar0.get()]['base_dmg']}")
             palmyra_perks()
         case "Wendigo GL3":
-            window.L3.configure(text="39531")
+            window.L3.configure(text=f"{wp_attributes[Svar0.get()]['base_dmg']}")
             wendigo_perks()
         case "Interference VI":
-            window.L3.configure(text="39382") # min = 39382, max = 46157
+            window.L3.configure(text=f"{wp_attributes[Svar0.get()]['base_dmg']}") # min = 39382, max = 46157
             interference_perks()
         case "Tarnation":
-            window.L3.configure(text="31880")
+            window.L3.configure(text=f"{wp_attributes[Svar0.get()]['base_dmg']}")
             # tarnation_impact()
         case "Cry Mutiny":
-            window.L3.configure(text="35411")
+            window.L3.configure(text=f"{wp_attributes[Svar0.get()]['base_dmg']}")
             cry_mutiny_perks()
         case "Typhon GL5":
-            window.L3.configure(text="39155")
+            window.L3.configure(text=f"{wp_attributes[Svar0.get()]['base_dmg']}")
             typhon_perks()
     isChecked()
     # test_color()
 
 def undo():
     # uncheck all checkboxes for the user
-    Cvar2.set(0)
-    Cvar3.set(0)
-    Cvar4.set(0)
-    Cvar5.set(0)
-    Cvar6.set(0)
-    Cvar7.set(0)
-    Cvar8.set(0)
-    Cvar9.set(0)
-    Cvar10.set(0)
-    Cvar11.set(0)
-    Cvar12.set(0)
-    Cvar13.set(0)
-    Cvar14.set(0)
-    Cvar15.set(0)
-    Cvar16.set(0)
-    Cvar17.set(0)
-    Cvar18.set(0)
-    Cvar19.set(0)
-    Cvar20.set(0)
+    # Cvar2.set(0)
+    # Cvar3.set(0)
+    # Cvar4.set(0)
+    # Cvar5.set(0)
+    # Cvar6.set(0)
+    # Cvar7.set(0)
+    # Cvar8.set(0)
+    # Cvar9.set(0)
+    # Cvar10.set(0)
+    # Cvar11.set(0)
+    # Cvar12.set(0)
+    # Cvar13.set(0)
+    # Cvar14.set(0)
+    # Cvar15.set(0)
+    # Cvar16.set(0)
+    # Cvar17.set(0)
+    # Cvar18.set(0)
+    # Cvar19.set(0)
+    # Cvar20.set(0)
     # change all window colors
     window.C0.config(fg="black")
     window.C1.config(fg="black")
@@ -597,28 +595,50 @@ Cvar19 = IntVar() # Adagio
 Cvar20 = IntVar() # lasting impression
 
 # here: add ALL weapons for the dropdown menu
-wp_attributes = {"Cataclysmic": 533,
-    "Stormchaser": 533,
-    "Fire and Forget": 533,
-    "Reed's Regret": 533,
-    "Sailspy Pitchglass": 533,
-    "Taipan 4FR": 533,
-    "Threaded Needle": 533,
-    "The Hothead": 20,
-    "Blowout": 20,
-    "Roar Of The Bear": 15,
-    "Hezen Vengeance": 25,
-    "Code Duello": 15,
-    "RedHerring": 20,
-    "Royal Entry": 15,
-    "Bump In The Night": 25,
-    "Palmyra-B": 15,
-    "Wendigo GL3": 120,
-    "Interference VI": 120,
-    "Tarnation": 150,
-    "Cry Mutiny": 120,
-    "Typhon GL5": 120,
-    }
+# add reload speed for each weapon
+wp_attributes = {"Cataclysmic":
+        {"charge_time": 533, "base_dmg": 56586, "mag_size": 6, "reserves": 22},
+    "Stormchaser":
+        {"charge_time": 533, "base_dmg": 27704, "mag_size": 5, "reserves": 22},
+    "Fire and Forget":
+        {"charge_time": 533, "base_dmg": 28258, "mag_size": 5, "reserves": 22},
+    "Reed's Regret":
+        {"charge_time": 533, "base_dmg": 57822, "mag_size": 5, "reserves": 22},
+    "Sailspy Pitchglass":
+        {"charge_time": 533, "base_dmg": 58356, "mag_size": 5, "reserves": 22},
+    "Taipan 4FR":
+        {"charge_time": 533, "base_dmg": 58356, "mag_size": 5, "reserves": 22},
+    "Threaded Needle":
+        {"charge_time": 533, "base_dmg": 58356, "mag_size": 5, "reserves": 22},
+    "The Hothead":
+        {"rpm": 20, "base_dmg": 98208, "mag_size": 1, "reserves": 7},
+    "Blowout":
+        {"rpm": 20, "base_dmg": 98208, "mag_size": 1, "reserves": 7},
+    "Roar Of The Bear":
+        {"rpm": 15, "base_dmg": 84309, "mag_size": 1, "reserves": 7},
+    "Hezen Vengeance":
+        {"rpm": 25, "base_dmg": 98209, "mag_size": 1, "reserves": 7},
+    "Code Duello":
+        {"rpm": 15, "base_dmg": 84309, "mag_size": 1, "reserves": 7},
+    "RedHerring":
+        {"rpm": 20, "base_dmg": 98208, "mag_size": 1, "reserves": 7},
+    "Royal Entry":
+        {"rpm": 15, "base_dmg": 80352, "mag_size": 1, "reserves": 7},
+    "Bump In The Night":
+        {"rpm": 25, "base_dmg": 98209, "mag_size": 1, "reserves": 7},
+    "Palmyra-B":
+        {"rpm": 15, "base_dmg": 80352, "mag_size": 1, "reserves": 7},
+    "Wendigo GL3":
+        {"rpm": 120, "base_dmg": 39531, "mag_size": 6, "reserves": 1},
+    "Interference VI":
+        {"rpm": 120, "base_dmg": 39382, "mag_size": 6, "reserves": 1},
+    "Tarnation":
+        {"rpm": 150, "base_dmg": 31880, "mag_size": 5, "reserves": 1},
+    "Cry Mutiny":
+        {"rpm": 120, "base_dmg": 35411, "mag_size": 4, "reserves": 1},
+    "Typhon GL5":
+        {"rpm": 120, "base_dmg": 39155, "mag_size": 6, "reserves": 1},
+}
 
 weapon_list = list(wp_attributes.keys())
 LFRs = weapon_list[:7]

@@ -324,24 +324,24 @@ def LFR_dps():
     if window.S0.get() == 0:
         return 0, 0
     else:
-        return round(wp_attributes[Svar0.get()]['mag_size'] * wp_attributes[Svar0.get()]['base_dmg'] / (wp_attributes[Svar0.get()]['mag_size'] * ((wp_attributes[Svar0.get()]['charge_time'] * 1e-3) + 0.2) + (window.S0.get() - 1) * window.LFR_reload_speed), 1), round(wp_attributes[Svar0.get()]['mag_size'] * float(base_LFR_dmg_3burst) / (wp_attributes[Svar0.get()]['mag_size'] * ((wp_attributes[Svar0.get()]['charge_time'] * 1e-3) + 0.2) + (window.S0.get() - 1) * window.LFR_reload_speed), 1)
+        return round(window.S0.get() * wp_attributes[Svar0.get()]['mag_size'] * float(base_LFR_dmg) / (window.S0.get() * wp_attributes[Svar0.get()]['mag_size'] * ((wp_attributes[Svar0.get()]['charge_time'] * 1e-3) + 0.44) + (window.S0.get() - 1) * window.LFR_reload_speed), 1), round(window.S0.get() * wp_attributes[Svar0.get()]['mag_size'] * float(base_LFR_dmg_3burst) / (window.S0.get() * wp_attributes[Svar0.get()]['mag_size'] * ((wp_attributes[Svar0.get()]['charge_time'] * 1e-3) + 0.44) + (window.S0.get() - 1) * window.LFR_reload_speed), 1)
 
 def rocket_dps():
-    # base_rocket_dmg = window.L7.cget("text")
+    base_rocket_dmg = window.L7.cget("text")
     if window.S1.get() == 0:
         return 0
     elif window.S1.get() == 1:
-        return round(wp_attributes[Svar0.get()]['base_dmg'], 1)
+        return round(float(base_rocket_dmg), 1)
     else:
-        return round((window.S1.get() * wp_attributes[Svar0.get()]['base_dmg']) / ((window.S1.get() - 1) * window.Rocket_reload_speed), 1)
+        return round((window.S1.get() * float(base_rocket_dmg)) / ((window.S1.get() - 1) * window.Rocket_reload_speed), 1)
 
 def GL_dps():
-    time_for_mag = wp_attributes[Svar0.get()]['mag_size'] / (wp_attributes[Svar0.get()]['rpm'] / 60)
     base_GL_dmg = window.L7.cget("text")
+    time_for_mag = wp_attributes[Svar0.get()]['mag_size'] / (wp_attributes[Svar0.get()]['rpm'] / 60)
     if window.S2.get() == 0:
         return 0
     else:
-        return round((window.S2.get() * wp_attributes[Svar0.get()]['base_dmg'] * wp_attributes[Svar0.get()]['mag_size']) / (window.S2.get() * time_for_mag + (window.S2.get() - 1) * window.GL_reload_speed), 1)
+        return round((window.S2.get() * float(base_GL_dmg) * wp_attributes[Svar0.get()]['mag_size']) / (window.S2.get() * time_for_mag + (window.S2.get() - 1) * window.GL_reload_speed), 1)
 
 def Select_Weapon():
     undo()
@@ -595,7 +595,6 @@ Cvar19 = IntVar() # Adagio
 Cvar20 = IntVar() # lasting impression
 
 # here: add ALL weapons for the dropdown menu
-# add reload speed for each weapon
 wp_attributes = {"Cataclysmic":
         {"charge_time": 533, "base_dmg": 56586, "mag_size": 6, "reserves": 22},
     "Stormchaser":
@@ -656,7 +655,6 @@ window = Window(root, 3.6, 3.0, 3.14) # unit for reload speed is seconds
 root.mainloop()
 
 ################ TODO ###############################################
-# Add more weapons buffs:
 # Golden Tricorn and Explosive light can be done as dropdown, or Radiobutton with 3 options (x0, x1, x2)
 #
 # whenever i add a new perk, do the following steps
@@ -666,15 +664,13 @@ root.mainloop()
 # 4. add it to isChecked() method as Cvar(...).get()
 # 5. append it to multipliers if value == 1
 #
-# whener i add a new weapon do the following steps:
+# whenever i add a new weapon do the following steps:
 # 1. add it to "wp" list
 # 2. make a function which colors its perks
 # 3. add it to Select_Weapon() method
 #
-# implement the calculate_dps() method into ischecked
-# to reduce redundancy
-#
 # fix slider with isChecked method
-#
+# add reload speed for each weapon to attributes
+# put wp_attributes in seperate file for overview purposes
 #
 ######################################################################

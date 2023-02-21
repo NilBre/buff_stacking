@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import re
 # import tkinter as tk
 # import tkinter as ttk
@@ -199,13 +200,45 @@ class Window():
 
         self.section3_2.pack(padx=4, pady=4)
         # subsection3_2
+
+
         self.section3.pack(padx=4, pady=4, expand=True, fill=X, side=LEFT)
         # --- section 3
+
+        # some plotting stuff
+        self.canvas = FigureCanvasTkAgg(fig, master=self.Main)
+        self.canvas.get_tk_widget().pack()
+
+        self.B10 = Button(self.Main, text="plot graph", command=plot)
+        self.B10.pack(pady=4)
+
         self.Main.pack(padx=4, pady=4)
         # --- section Main
 
-# Begin main part
-root = Tk()
+def plot():
+    # this ist just for an example
+    # plqn: draw dps over several magazines/bullets/rockets/...
+    # ax.clear() # removes previous data points
+    if Svar0.get() in LFRs:
+        if Svar0.get() != "Stormchaser" and Svar0.get() != "Fire and Forget":
+            single_bullet = window.L13.cget("text")
+            burst = 0
+        if Svar0.get() == "Stormchaser" or Svar0.get() == "Fire and Forget":
+            single_bullet = window.L13.cget("text")
+            burst = window.L13_1.cget("text")
+    if Svar0.get() in Rockets:
+        dps = window.L15.cget("text")
+    if Svar0.get() in GLs:
+        dps = get_GL_dps_full()[1:]
+    print(dps)
+    x = np.linspace(0, len(dps), len(dps))
+    y = dps
+    ax.plot(x, y, label=f"{Svar0.get()}")
+    plt.xlabel("magazine number")
+    plt.ylabel("DPS")
+    plt.legend()
+    plt.grid()
+    window.canvas.draw()
 
 def isChecked():
     base_damage = window.L3.cget("text")
@@ -339,6 +372,26 @@ def GL_dps():
         return 0
     else:
         return round((window.S2.get() * float(base_GL_dmg) * wp_attributes[Svar0.get()]['mag_size']) / (window.S2.get() * time_for_mag + (window.S2.get() - 1) * wp_attributes[Svar0.get()]['reload_speed']), 1)
+
+# -----------------------
+# functions for each weapon type that returns array
+# of dps numbers for number of rockets/magazines
+def get_GL_dps_full():
+    # shape = [n_mags] list of length round(reserves/magsize), n_mags = dps value for each mag
+    dps_vals = []
+    base_GL_dmg = window.L7.cget("text")
+    time_for_mag = wp_attributes[Svar0.get()]['mag_size'] / (wp_attributes[Svar0.get()]['rpm'] / 60)
+    total_mags = round(wp_attributes[Svar0.get()]['reserves'] / wp_attributes[Svar0.get()]['mag_size'])
+    # print(f"selected GL: {Svar0.get()}")
+    for i in range(total_mags):
+        if i == 0:
+            dps_vals.append(0)
+        else:
+            dps_vals.append(round((i * float(base_GL_dmg) * wp_attributes[Svar0.get()]['mag_size']) / (i * time_for_mag + (i - 1) * wp_attributes[Svar0.get()]['reload_speed']), 1))
+    return dps_vals
+
+# ------------------------
+
 
 def Select_Weapon():
     undo()
@@ -570,6 +623,11 @@ def code_duello_perks():
     window.C13.config(fg="green")
     window.C18.config(fg="green")
 
+# Begin main part
+root = Tk()
+
+fig, ax = plt.subplots()
+
 # define Checkbox variables
 Cvar2 = IntVar()  # Font of Might
 Cvar3 = IntVar()  # Focused Fury
@@ -625,15 +683,15 @@ wp_attributes = {"Cataclysmic":
     "Palmyra-B":
         {"rpm": 15, "base_dmg": 80352, "mag_size": 1, "reserves": 7, "reload_speed": 3.59},
     "Wendigo GL3":
-        {"rpm": 120, "base_dmg": 39531, "mag_size": 6, "reserves": 1, "reload_speed": 3.14},
+        {"rpm": 120, "base_dmg": 39531, "mag_size": 6, "reserves": 24, "reload_speed": 3.14},
     "Interference VI":
-        {"rpm": 120, "base_dmg": 39382, "mag_size": 6, "reserves": 1, "reload_speed": 3.25},
+        {"rpm": 120, "base_dmg": 39382, "mag_size": 6, "reserves": 24, "reload_speed": 3.25},
     "Tarnation":
-        {"rpm": 150, "base_dmg": 31880, "mag_size": 5, "reserves": 1, "reload_speed": 3.57},
+        {"rpm": 150, "base_dmg": 31880, "mag_size": 5, "reserves": 24, "reload_speed": 3.57},
     "Cry Mutiny":
-        {"rpm": 120, "base_dmg": 35411, "mag_size": 4, "reserves": 1, "reload_speed": 3.16},
+        {"rpm": 120, "base_dmg": 35411, "mag_size": 4, "reserves": 24, "reload_speed": 3.16},
     "Typhon GL5":
-        {"rpm": 120, "base_dmg": 39155, "mag_size": 6, "reserves": 1, "reload_speed": 3.16},
+        {"rpm": 120, "base_dmg": 39155, "mag_size": 6, "reserves": 24, "reload_speed": 3.16},
 }
 
 weapon_list = list(wp_attributes.keys())
@@ -647,6 +705,7 @@ Svar0.set(list(wp_attributes.keys())[0])
 Rvar0 = IntVar()
 Rvar1 = IntVar()
 
+# load class window
 window = Window(root) # unit for reload speed is seconds
 
 root.mainloop()

@@ -212,6 +212,9 @@ class Window():
         self.B10 = Button(self.Main, text="plot graph", command=plot)
         self.B10.pack(pady=4)
 
+        self.B11 = Button(self.Main, text="clear graphs", command=clear_plot)
+        self.B11.pack(pady=4)
+
         self.Main.pack(padx=4, pady=4)
         # --- section Main
 
@@ -221,24 +224,32 @@ def plot():
     # ax.clear() # removes previous data points
     if Svar0.get() in LFRs:
         if Svar0.get() != "Stormchaser" and Svar0.get() != "Fire and Forget":
-            single_bullet = window.L13.cget("text")
-            burst = 0
+            # single_bullet = window.L13.cget("text")
+            # burst = 0
+            dps = get_lfr_dps_full()[0][:]
         if Svar0.get() == "Stormchaser" or Svar0.get() == "Fire and Forget":
-            single_bullet = window.L13.cget("text")
-            burst = window.L13_1.cget("text")
+            # single_bullet = window.L13.cget("text")
+            # burst = window.L13_1.cget("text")
+            dps = get_lfr_dps_full()[1][:]
     if Svar0.get() in Rockets:
-        dps = window.L15.cget("text")
+        # dps = window.L15.cget("text")
+        dps = get_rocket_dps_full()[:]
     if Svar0.get() in GLs:
-        dps = get_GL_dps_full()[1:]
+        dps = get_GL_dps_full()[:]
     print(dps)
-    x = np.linspace(0, len(dps), len(dps))
+    x = np.linspace(1, len(dps), len(dps))
     y = dps
     ax.plot(x, y, label=f"{Svar0.get()}")
-    plt.xlabel("magazine number")
-    plt.ylabel("DPS")
-    plt.legend()
-    plt.grid()
+    ax.set_xlabel("magazine number")
+    ax.set_ylabel("DPS")
+    ax.legend()
+    ax.grid()
     window.canvas.draw()
+
+def clear_plot():
+    print('double click this button!')
+    window.canvas.draw()
+    ax.clear()
 
 def isChecked():
     base_damage = window.L3.cget("text")
@@ -383,29 +394,51 @@ def get_GL_dps_full():
     time_for_mag = wp_attributes[Svar0.get()]['mag_size'] / (wp_attributes[Svar0.get()]['rpm'] / 60)
     total_mags = round(wp_attributes[Svar0.get()]['reserves'] / wp_attributes[Svar0.get()]['mag_size'])
     # print(f"selected GL: {Svar0.get()}")
-    for i in range(total_mags):
+    for i in range(1,total_mags+1):
         if i == 0:
             dps_vals.append(0)
         else:
             dps_vals.append(round((i * float(base_GL_dmg) * wp_attributes[Svar0.get()]['mag_size']) / (i * time_for_mag + (i - 1) * wp_attributes[Svar0.get()]['reload_speed']), 1))
     return dps_vals
 
-# ------------------------
+def get_rocket_dps_full():
+    dps_vals = []
+    base_rocket_dmg = window.L7.cget("text")
+    total_mags = round(wp_attributes[Svar0.get()]['reserves'] / wp_attributes[Svar0.get()]['mag_size'])
+    print(total_mags)
+    for i in range(1,total_mags+1):
+        if i == 0:
+            dps_vals.append(0)
+        if i == 1:
+            dps_vals.append(round(float(base_rocket_dmg), 1))
+        else:
+            dps_vals.append(round((i * float(base_rocket_dmg)) / ((i - 1) * wp_attributes[Svar0.get()]['reload_speed']), 1))
+    return dps_vals
 
+def get_lfr_dps_full():
+    dps_vals1 = []
+    dps_vals3 = []
+    base_lfr_dmg = window.L7.cget("text")
+    base_LFR_dmg_3burst = window.L7_1.cget("text")
+    if window.L7_1.cget("text") == "":
+        base_LFR_dmg_3burst = 0
+    else:
+        base_LFR_dmg_3burst = window.L7_1.cget("text")
+    total_mags = round(wp_attributes[Svar0.get()]['reserves'] / wp_attributes[Svar0.get()]['mag_size'])
+    for i in range(1,total_mags+1):
+        if i == 0:
+            dps_vals1.append(0)
+            dps_vals3.append(0)
+        else:
+            dps_vals1.append(round((i * float(base_lfr_dmg) * wp_attributes[Svar0.get()]['mag_size']) / (i * wp_attributes[Svar0.get()]['mag_size'] * ((wp_attributes[Svar0.get()]['charge_time'] * 1e-3) + 0.44) +
+                (i - 1) * wp_attributes[Svar0.get()]['reload_speed']), 1)),
+            dps_vals3.append(round((i * float(base_LFR_dmg_3burst) * wp_attributes[Svar0.get()]['mag_size']) / (i * wp_attributes[Svar0.get()]['mag_size'] * ((wp_attributes[Svar0.get()]['charge_time'] * 1e-3) + 0.44) +
+                (i- 1) * wp_attributes[Svar0.get()]['reload_speed']), 1))
+    return dps_vals1, dps_vals3
+# ------------------------
 
 def Select_Weapon():
     undo()
-    # print("selected weapon: " + Svar0.get())
-    ### --- python version older than 3.10 (don't know switch cases)
-    # if Svar0.get() == "Cataclysmic":
-    #     window.L3.configure(text="56586")
-    # if Svar0.get() == "Stormchaser":
-    #     window.L3.configure(text="27704")
-    # if Svar0.get() == "Fire and Forget":
-    #     window.L3.configure(text="28258")
-    # if Svar0.get() == "Reed's Regret":
-    #     window.L3.configure(text="123")
-
     # damage numbers are for minibosses
     match Svar0.get():
         case "Cataclysmic":
@@ -694,10 +727,16 @@ wp_attributes = {"Cataclysmic":
         {"rpm": 120, "base_dmg": 39155, "mag_size": 6, "reserves": 24, "reload_speed": 3.16},
 }
 
+N_LFRs = 7
+N_Rockets = 9
+N_GLs = 5
+diff1 = N_LFRs + N_Rockets
+diff2 = N_LFRs + N_Rockets + N_GLs
+
 weapon_list = list(wp_attributes.keys())
-LFRs = weapon_list[:7]
-Rockets = weapon_list[7:16]
-GLs = weapon_list[16:21]
+LFRs = weapon_list[:N_LFRs]
+Rockets = weapon_list[N_LFRs:diff1]
+GLs = weapon_list[diff1:diff2]
 
 Svar0 = StringVar(root)
 Svar0.set(list(wp_attributes.keys())[0])

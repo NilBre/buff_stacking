@@ -79,7 +79,7 @@ class Window():
         self.L12 = Label(self.section1, text="Linear Fusion DPS")
         self.L12.pack(padx=4, pady=4)
 
-        self.S0 = Scale(self.section1, from_=0, to_=3, orient=HORIZONTAL)
+        self.S0 = Scale(self.section1, from_=0, to_=3, orient=HORIZONTAL, command = Calculate_DPS)
         self.S0.pack(padx=4, pady=4)
 
         # --- subsection1_1
@@ -97,7 +97,7 @@ class Window():
         self.L14 = Label(self.section1, text="Rocketlauncher DPS")
         self.L14.pack(padx=4, pady=4)
 
-        self.S1 = Scale(self.section1, from_=0, to_=7, orient=HORIZONTAL)
+        self.S1 = Scale(self.section1, from_=0, to_=7, orient=HORIZONTAL, command = Calculate_DPS)
         self.S1.pack(padx=4, pady=4)
 
         self.L15 = Label(self.section1, text="0")
@@ -106,7 +106,7 @@ class Window():
         self.L16 = Label(self.section1, text="Grenadelauncher DPS")
         self.L16.pack(padx=4, pady=4)
 
-        self.S2 = Scale(self.section1, from_=0, to_=3, orient=HORIZONTAL)
+        self.S2 = Scale(self.section1, from_=0, to_=3, orient=HORIZONTAL, command = Calculate_DPS)
         self.S2.pack(padx=4, pady=4)
 
         self.L17 = Label(self.section1, text="0")
@@ -220,7 +220,7 @@ class Window():
 
 def plot():
     # this ist just for an example
-    # plqn: draw dps over several magazines/bullets/rockets/...
+    # Plan: draw dps over several magazines/bullets/rockets/...
     # ax.clear() # removes previous data points
     if Svar0.get() in LFRs:
         if Svar0.get() != "Stormchaser" and Svar0.get() != "Fire and Forget":
@@ -236,14 +236,15 @@ def plot():
         dps = get_rocket_dps_full()[:]
     if Svar0.get() in GLs:
         dps = get_GL_dps_full()[:]
-    print(dps)
+    # print(dps)
     x = np.linspace(1, len(dps), len(dps))
     y = dps
     ax.plot(x, y, label=f"{Svar0.get()}")
     ax.set_xlabel("magazine number")
     ax.set_ylabel("DPS")
     ax.legend()
-    ax.grid()
+    if ax.grid(True):
+        ax.grid()
     window.canvas.draw()
 
 def clear_plot():
@@ -337,25 +338,28 @@ def isChecked():
         window.L7.configure(text=f"{round(wp_attributes[Svar0.get()]['base_dmg'] * np.prod(multipliers), 1)}")
         window.L7_1.configure(text=f"")
     window.L8.configure(text=f"Damage Multiplier: {round((np.prod(multipliers) - 1) * 100, 1)} in %")
-    Calculate_DPS()
 
-def Calculate_DPS():
+def Calculate_DPS(mag_size):
     # amp_damage = window.L7.cget("text")
     # amp_damage_3burst = window.L7_1.cget("text")
     print("momentary weapon:", Svar0.get())
     if Svar0.get() in LFRs:
+        mag_size = window.S0.get()
         if Svar0.get() != "Stormchaser" and Svar0.get() != "Fire and Forget":
-            window.L13.configure(text=f"{LFR_dps()[0]} DPS for {window.S0.get()} mag(s)")
-            window.L13_1.configure(text=f"")
+            LFR_dps(mag_size)
         if Svar0.get() == "Stormchaser" or Svar0.get() == "Fire and Forget":
-            window.L13.configure(text=f"{LFR_dps()[0]} DPS for {window.S0.get()} mag(s)")
-            window.L13_1.configure(text=f"{LFR_dps()[1]} DPS for {window.S0.get()} mag(s)")
+            LFR_dps(mag_size)
     if Svar0.get() in Rockets:
-        window.L15.configure(text=f"{rocket_dps()} DPS for {window.S1.get()} rockets")
+        mag_size = window.S1.get()
+        rocket_dps(mag_size)
     if Svar0.get() in GLs:
-        window.L17.configure(text=f"{GL_dps()} DPS for {window.S2.get()} magazines")
+        mag_size = window.S2.get()
+        GL_dps(mag_size)
 
-def LFR_dps():
+# these dps values might get removed since i can easily plot them but
+# changing values dynamicly would be nice
+def LFR_dps(mag):
+    mag = window.S0.get()
     base_LFR_dmg = window.L7.cget("text")
     base_LFR_dmg_3burst = window.L7_1.cget("text")
     if window.L7_1.cget("text") == "":
@@ -363,26 +367,35 @@ def LFR_dps():
     else:
         base_LFR_dmg_3burst = window.L7_1.cget("text")
     if window.S0.get() == 0:
-        return 0, 0
+        window.L13.configure(text='0 DPS')
+        window.L13_1.configure(text='0 DPS')
     else:
-        return round(window.S0.get() * wp_attributes[Svar0.get()]['mag_size'] * float(base_LFR_dmg) / (window.S0.get() * wp_attributes[Svar0.get()]['mag_size'] * ((wp_attributes[Svar0.get()]['charge_time'] * 1e-3) + 0.44) + (window.S0.get() - 1) * wp_attributes[Svar0.get()]['reload_speed']), 1), round(window.S0.get() * wp_attributes[Svar0.get()]['mag_size'] * float(base_LFR_dmg_3burst) / (window.S0.get() * wp_attributes[Svar0.get()]['mag_size'] * ((wp_attributes[Svar0.get()]['charge_time'] * 1e-3) + 0.44) + (window.S0.get() - 1) * wp_attributes[Svar0.get()]['reload_speed']), 1)
+        result1 = round(window.S0.get() * wp_attributes[Svar0.get()]['mag_size'] * float(base_LFR_dmg) / (window.S0.get() * wp_attributes[Svar0.get()]['mag_size'] * ((wp_attributes[Svar0.get()]['charge_time'] * 1e-3) + 0.44) + (window.S0.get() - 1) * wp_attributes[Svar0.get()]['reload_speed']), 1)
+        result2 = round(window.S0.get() * wp_attributes[Svar0.get()]['mag_size'] * float(base_LFR_dmg_3burst) / (window.S0.get() * wp_attributes[Svar0.get()]['mag_size'] * ((wp_attributes[Svar0.get()]['charge_time'] * 1e-3) + 0.44) + (window.S0.get() - 1) * wp_attributes[Svar0.get()]['reload_speed']), 1)
+        window.L13.configure(text=f'{result1} DPS / {mag} mag(s)')
+        window.L13_1.configure(text=f'{result2} DPS / {mag} mag(s)')
 
-def rocket_dps():
+def rocket_dps(mag):
+    mag = window.S1.get()
     base_rocket_dmg = window.L7.cget("text")
-    if window.S1.get() == 0:
-        return 0
-    elif window.S1.get() == 1:
-        return round(float(base_rocket_dmg), 1)
+    if mag == 0:
+        window.L15.configure(text="0 DPS")
+    elif mag == 1:
+        result = round(float(base_rocket_dmg), 1)
+        window.L15.configure(text=f"{result} DPS / {window.S1.get()} rockets")
     else:
-        return round((window.S1.get() * float(base_rocket_dmg)) / ((window.S1.get() - 1) * wp_attributes[Svar0.get()]['reload_speed']), 1)
+        result = round((window.S1.get() * float(base_rocket_dmg)) / ((window.S1.get() - 1) * wp_attributes[Svar0.get()]['reload_speed']), 1)
+        window.L15.configure(text=f"{result} DPS / {window.S1.get()} rockets")
 
-def GL_dps():
+def GL_dps(mag):
+    mag = window.S2.get()
     base_GL_dmg = window.L7.cget("text")
     time_for_mag = wp_attributes[Svar0.get()]['mag_size'] / (wp_attributes[Svar0.get()]['rpm'] / 60)
     if window.S2.get() == 0:
-        return 0
+        window.L17.configure(text="0 DPS")
     else:
-        return round((window.S2.get() * float(base_GL_dmg) * wp_attributes[Svar0.get()]['mag_size']) / (window.S2.get() * time_for_mag + (window.S2.get() - 1) * wp_attributes[Svar0.get()]['reload_speed']), 1)
+        result = round((window.S2.get() * float(base_GL_dmg) * wp_attributes[Svar0.get()]['mag_size']) / (window.S2.get() * time_for_mag + (window.S2.get() - 1) * wp_attributes[Svar0.get()]['reload_speed']), 1)
+        window.L17.configure(text=f"{result} DPS / {window.S2.get()} mag(s)")
 
 # -----------------------
 # functions for each weapon type that returns array
@@ -658,6 +671,7 @@ def code_duello_perks():
 
 # Begin main part
 root = Tk()
+root.geometry("1500x700")
 
 fig, ax = plt.subplots()
 
@@ -765,7 +779,6 @@ root.mainloop()
 # 3. add it to Select_Weapon() method
 #
 # fix slider with isChecked method
-# add reload speed for each weapon to attributes
 # put wp_attributes in seperate file for overview purposes
 #
 ######################################################################
